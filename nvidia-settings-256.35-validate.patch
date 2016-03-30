@@ -1,0 +1,17 @@
+diff -up nvidia-settings-256.35/doc/nvidia-settings.desktop.validate nvidia-settings-256.35/doc/nvidia-settings.desktop
+--- nvidia-settings-256.35/doc/nvidia-settings.desktop.validate 2010-06-17 05:02:48.000000000 +0200
++++ nvidia-settings-256.35/doc/nvidia-settings.desktop  2010-07-10 16:43:47.000000000 +0200
+@@ -3,9 +3,9 @@ Type=Application
+ Encoding=UTF-8
+ Name=NVIDIA X Server Settings
+ Comment=Configure NVIDIA X Server Settings
+-Exec=__UTILS_PATH__/nvidia-settings
+-Icon=__PIXMAP_PATH__/nvidia-settings.png
+-Categories=__NVIDIA_SETTINGS_DESKTOP_CATEGORIES__
++Exec=nvidia-settings
++Icon=nvidia-settings
++Categories=System;Settings;
+ 
+ # Translations provided by Sun Microsystems
+ Name[de]=NVIDIA X-Server-Einstellungen
+
