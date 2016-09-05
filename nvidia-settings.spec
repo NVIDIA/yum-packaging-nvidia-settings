@@ -31,7 +31,7 @@ BuildRequires:  gtk3-devel
 %endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
-Requires:       nvidia-settings%{?_isa} = %{?epoch}:%{version}
+Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
 # Loaded at runtime
 Requires:       libvdpau%{?_isa} >= 0.9
 
