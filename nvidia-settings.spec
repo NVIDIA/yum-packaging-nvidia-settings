@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        370.23
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
 License:        GPLv2+
@@ -30,7 +30,8 @@ BuildRequires:  mesa-libGL-devel
 BuildRequires:  gtk3-devel
 %endif
 
-Requires:       nvidia-libXNVCtrl = %{?epoch}:%{version}-%{release}
+Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
+Requires:       nvidia-settings%{?_isa} = %{?epoch}:%{version}
 # Loaded at runtime
 Requires:       libvdpau%{?_isa} >= 0.9
 
@@ -104,9 +105,17 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desk
 
 %postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
-%post -n nvidia-settings -p /sbin/ldconfig
+%post
+/sbin/ldconfig
+%if 0%{?fedora} < 25 || 0%{?rhel} < 8
+/usr/bin/update-desktop-database &> /dev/null || :
+%endif
 
-%postun -n nvidia-settings -p /sbin/ldconfig
+%postun
+/sbin/ldconfig
+%if 0%{?fedora} < 25 || 0%{?rhel} < 8
+/usr/bin/update-desktop-database &> /dev/null || :
+%endif
 
 %files
 %{_bindir}/%{name}
@@ -127,6 +136,10 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desk
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Mon Sep 05 2016 Simone Caronni <negativo17@gmail.com> - 2:370.23-2
+- Update requirements, make it require nvidia-driver.
+- Add update-desktop-database to Fedora < 25 and RHEL/CentOS < 8.
+
 * Wed Aug 17 2016 Simone Caronni <negativo17@gmail.com> - 2:370.23-1
 - Update to 370.23.
 
