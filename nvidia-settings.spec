@@ -107,13 +107,13 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desk
 
 %post
 /sbin/ldconfig
-%if 0%{?fedora} == 24 || %if 0%{?fedora} == 23 || 0%{?rhel} == 7
+%if 0%{?fedora} == 24 || 0%{?fedora} == 23 || 0%{?rhel} == 7
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 
 %postun
 /sbin/ldconfig
-%if 0%{?fedora} == 24 || %if 0%{?fedora} == 23 || 0%{?rhel} == 7
+%if 0%{?fedora} == 24 || 0%{?fedora} == 23 || 0%{?rhel} == 7
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 
