@@ -12,7 +12,7 @@ diff -Naur nvidia-settings-367.44.old/doc/nvidia-settings.desktop nvidia-setting
 -Categories=__NVIDIA_SETTINGS_DESKTOP_CATEGORIES__
 +Exec=nvidia-settings
 +Icon=nvidia-settings
-+Categories=Settings
++Categories=System;Settings
 +Keywords=nvidia;vulkan;opengl;driver
  
  # Translations provided by Sun Microsystems
