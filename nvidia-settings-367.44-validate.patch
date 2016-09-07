@@ -1,0 +1,19 @@
+diff -Naur nvidia-settings-367.44.old/doc/nvidia-settings.desktop nvidia-settings-367.44/doc/nvidia-settings.desktop
+--- nvidia-settings-367.44.old/doc/nvidia-settings.desktop	2016-09-07 14:08:12.059512561 +0200
++++ nvidia-settings-367.44/doc/nvidia-settings.desktop	2016-09-07 14:14:55.606566254 +0200
+@@ -1,11 +1,11 @@
+ [Desktop Entry]
+ Type=Application
+-Encoding=UTF-8
+ Name=NVIDIA X Server Settings
+ Comment=Configure NVIDIA X Server Settings
+-Exec=__UTILS_PATH__/nvidia-settings
+-Icon=__PIXMAP_PATH__/nvidia-settings.png
+-Categories=__NVIDIA_SETTINGS_DESKTOP_CATEGORIES__
++Exec=nvidia-settings
++Icon=nvidia-settings
++Categories=Settings
++Keywords=nvidia;vulkan;opengl;driver
+ 
+ # Translations provided by Sun Microsystems
+ Name[de]=NVIDIA X-Server-Einstellungen

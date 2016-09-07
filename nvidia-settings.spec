@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        370.23
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
 License:        GPLv2+
@@ -9,7 +9,8 @@ ExclusiveArch:  %{ix86} x86_64
 
 Source0:        ftp://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-load.desktop
-Patch0:         %{name}-256.35-validate.patch
+Source2:        com.nvidia.driver.settings.appdata.xml
+Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-364.12-defaults.patch
 Patch2:         %{name}-364.12-libXNVCtrl-so.patch
 
@@ -101,6 +102,12 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
+%if 0%{?fedora} >= 25
+# install AppData and add modalias provides
+mkdir -p %{buildroot}%{_datadir}/appdata
+install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
+%endif
+
 %post -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
 %postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
@@ -119,6 +126,9 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desk
 
 %files
 %{_bindir}/%{name}
+%if 0%{?fedora} >= 25
+%{_datadir}/appdata/com.nvidia.driver.settings.appdata.xml
+%endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
 %{_libdir}/libnvidia-gtk*.so.%{version}
@@ -136,6 +146,10 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desk
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Wed Sep 07 2016 Simone Caronni <negativo17@gmail.com> - 2:370.23-3
+- Update desktop file to latest spec for AppStream metadata.
+- Add AppStream metadata file.
+
 * Mon Sep 05 2016 Simone Caronni <negativo17@gmail.com> - 2:370.23-2
 - Update requirements, make it require nvidia-driver.
 - Add update-desktop-database to Fedora < 25 and RHEL/CentOS < 8.
