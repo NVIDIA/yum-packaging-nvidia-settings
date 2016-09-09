@@ -29,7 +29,7 @@
   <translation/>
   <url type="homepage">http://www.nvidia.com/</url>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>LicenseRef-proprietary:NVIDIA</project_license>
+  <project_license>GPL-2.0+</project_license>
   <developer_name>NVIDIA Corporation</developer_name>
   <screenshots>
     <screenshot type="default">
