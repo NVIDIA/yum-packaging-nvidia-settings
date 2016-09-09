@@ -1,6 +1,6 @@
 Name:           nvidia-settings
-Version:        370.23
-Release:        3%{?dist}
+Version:        370.28
+Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
 License:        GPLv2+
@@ -146,6 +146,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Fri Sep 09 2016 Simone Caronni <negativo17@gmail.com> - 2:370.28-1
+- Update to 370.28.
+
 * Wed Sep 07 2016 Simone Caronni <negativo17@gmail.com> - 2:370.23-3
 - Update desktop file to latest spec for AppStream metadata.
 - Add AppStream metadata file.
