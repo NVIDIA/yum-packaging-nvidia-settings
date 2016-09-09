@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>nvidia-settings.desktop</id>
-  <name>NVIDIA</name>
+  <name>NVIDIA Control Panel</name>
   <summary>Accelerated Linux Graphics Driver Control Panel</summary>
   <description>
     <p>
