@@ -1,6 +1,6 @@
 Name:           nvidia-settings
-Version:        370.23
-Release:        2%{?dist}
+Version:        367.57
+Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
 License:        GPLv2+
@@ -136,6 +136,9 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desk
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Mon Oct 10 2016 Simone Caronni <negativo17@gmail.com> - 2:367.57-1
+- Update to 367.57.
+
 * Mon Sep 05 2016 Simone Caronni <negativo17@gmail.com> - 2:370.23-2
 - Update requirements, make it require nvidia-driver.
 - Add update-desktop-database to Fedora < 25 and RHEL/CentOS < 8.
