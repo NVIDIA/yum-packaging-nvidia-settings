@@ -14,6 +14,7 @@ Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-364.12-defaults.patch
 Patch2:         %{name}-364.12-libXNVCtrl-so.patch
 
+BuildRequires:  cuda-nvml-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
@@ -24,8 +25,6 @@ BuildRequires:  libXrandr-devel
 BuildRequires:  libXv-devel
 BuildRequires:  m4
 BuildRequires:  mesa-libGL-devel
-# Not yet available with version 340.29 (error: 'NVML_ERROR_OPERATING_SYSTEM' undeclared
-#BuildRequires:  nvidia-driver-NVML-devel > 340.29
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gtk3-devel
@@ -78,10 +77,11 @@ sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 %build
 make %{?_smp_mflags} \
     DEBUG=1 \
-    NV_VERBOSE=1 \
-    PREFIX=%{_prefix} \
     NV_USE_BUNDLED_LIBJANSSON=0 \
-    NVML_AVAILABLE=0
+    NV_VERBOSE=1 \
+    NVML_EXPERIMENTAL=1 \
+    NVML_CFLAGS="-I %{_includedir}/cuda" \
+    PREFIX=%{_prefix}
 #X_LDFLAGS="-L%{_libdir}" \
 
 %install
@@ -148,6 +148,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %changelog
 * Sat Oct 22 2016 Simone Caronni <negativo17@gmail.com> - 2:375.10-1
 - Update to 375.10.
+- Enable NVML support.
 
 * Fri Sep 09 2016 Simone Caronni <negativo17@gmail.com> - 2:370.28-1
 - Update to 370.28.
