@@ -11,8 +11,8 @@ Source0:        ftp://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-367.44-validate.patch
-Patch1:         %{name}-364.12-defaults.patch
-Patch2:         %{name}-364.12-libXNVCtrl-so.patch
+Patch1:         %{name}-375.10-defaults.patch
+Patch2:         %{name}-375.10-libXNVCtrl-so.patch
 
 BuildRequires:  cuda-nvml-devel
 BuildRequires:  desktop-file-utils
