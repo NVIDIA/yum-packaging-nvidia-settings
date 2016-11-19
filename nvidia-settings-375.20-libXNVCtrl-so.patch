@@ -1,6 +1,6 @@
-diff -Naur nvidia-settings-375.10.old/src/libXNVCtrl/Makefile nvidia-settings-375.10/src/libXNVCtrl/Makefile
---- nvidia-settings-375.10.old/src/libXNVCtrl/Makefile	2016-10-22 10:51:07.519013154 +0200
-+++ nvidia-settings-375.10/src/libXNVCtrl/Makefile	2016-10-22 10:52:42.399112323 +0200
+diff -Naur nvidia-settings-375.20.old/src/libXNVCtrl/Makefile nvidia-settings-375.20/src/libXNVCtrl/Makefile
+--- nvidia-settings-375.20.old/src/libXNVCtrl/Makefile	2016-11-19 13:19:10.467029106 +0100
++++ nvidia-settings-375.20/src/libXNVCtrl/Makefile	2016-11-19 13:19:22.190269968 +0100
 @@ -31,7 +31,7 @@
  # assign variables
  ##############################################################################
@@ -24,9 +24,9 @@ diff -Naur nvidia-settings-375.10.old/src/libXNVCtrl/Makefile nvidia-settings-37
  
  # define the rule to build each object file
  $(foreach src,$(SRC),$(eval $(call DEFINE_OBJECT_RULE,TARGET,$(src))))
-diff -Naur nvidia-settings-375.10.old/src/Makefile nvidia-settings-375.10/src/Makefile
---- nvidia-settings-375.10.old/src/Makefile	2016-10-22 10:51:07.517013110 +0200
-+++ nvidia-settings-375.10/src/Makefile	2016-10-22 10:52:42.399112323 +0200
+diff -Naur nvidia-settings-375.20.old/src/Makefile nvidia-settings-375.20/src/Makefile
+--- nvidia-settings-375.20.old/src/Makefile	2016-11-19 13:19:10.467029106 +0100
++++ nvidia-settings-375.20/src/Makefile	2016-11-19 13:19:22.191269989 +0100
 @@ -103,9 +103,12 @@
  # assignments should be used)
  ##############################################################################
@@ -41,7 +41,7 @@ diff -Naur nvidia-settings-375.10.old/src/Makefile nvidia-settings-375.10/src/Ma
  XCONFIG_PARSER_DIR      ?= XF86Config-parser
  COMMON_UTILS_DIR        ?= common-utils
  COMMON_UNIX_DIR         ?= common-unix
-@@ -281,11 +284,18 @@
+@@ -267,11 +270,18 @@
  NVIDIA_SETTINGS_install: $(NVIDIA_SETTINGS)
  	$(MKDIR) $(BINDIR)
  	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
@@ -62,7 +62,7 @@ diff -Naur nvidia-settings-375.10.old/src/Makefile nvidia-settings-375.10/src/Ma
  
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
  $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(VERSION_MK)
-@@ -319,6 +329,7 @@
+@@ -305,6 +315,7 @@
  	@$(MAKE) -C $(XNVCTRL_DIR) -f $(XNVCTRL_MAKEFILE)
  
  clean clobber:

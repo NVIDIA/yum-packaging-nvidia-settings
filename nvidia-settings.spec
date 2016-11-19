@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        375.10
+Version:        375.20
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
@@ -13,10 +13,7 @@ Source2:        %{name}.appdata.xml
 Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-375.10-defaults.patch
 Patch2:         %{name}-375.10-libXNVCtrl-so.patch
-# https://github.com/NVIDIA/nvidia-settings/issues/4
-Patch3:         %{name}-375.10-fix.patch
 
-BuildRequires:  cuda-nvml-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
@@ -69,7 +66,6 @@ developing applications that use the NV-CONTROL API.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 # Remove bundled jansson
 rm -fr src/jansson
@@ -152,6 +148,10 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Sat Nov 19 2016 Simone Caronni <negativo17@gmail.com> - 2:375.20-1
+- Update to 375.20, switch to internal NVML header.
+- Remove unused patches.
+
 * Sat Oct 22 2016 Simone Caronni <negativo17@gmail.com> - 2:375.10-1
 - Update to 375.10, NVML support now required.
 - Specify to use system jansson also on install, or bundled copy is used.
