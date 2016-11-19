@@ -1,6 +1,6 @@
-diff -Naur nvidia-settings-364.12.old/samples/Makefile nvidia-settings-364.12/samples/Makefile
---- nvidia-settings-364.12.old/samples/Makefile	2016-03-22 19:38:48.851335618 +0100
-+++ nvidia-settings-364.12/samples/Makefile	2016-03-22 19:40:57.790490526 +0100
+diff -Naur nvidia-settings-375.10.old/samples/Makefile nvidia-settings-375.10/samples/Makefile
+--- nvidia-settings-375.10.old/samples/Makefile	2016-10-22 10:51:07.528013352 +0200
++++ nvidia-settings-375.10/samples/Makefile	2016-10-22 10:51:40.868748645 +0200
 @@ -59,6 +59,7 @@
  LDFLAGS               += -L $(XNVCTRL_DIR)
  LIBS                  += -lXNVCtrl -lXext -lX11
@@ -9,9 +9,9 @@ diff -Naur nvidia-settings-364.12.old/samples/Makefile nvidia-settings-364.12/sa
  
  ##############################################################################
  # samples
-diff -Naur nvidia-settings-364.12.old/src/libXNVCtrl/utils.mk nvidia-settings-364.12/src/libXNVCtrl/utils.mk
---- nvidia-settings-364.12.old/src/libXNVCtrl/utils.mk	2016-03-22 19:38:48.842335467 +0100
-+++ nvidia-settings-364.12/src/libXNVCtrl/utils.mk	2016-03-22 19:40:57.791490543 +0100
+diff -Naur nvidia-settings-375.10.old/src/libXNVCtrl/utils.mk nvidia-settings-375.10/src/libXNVCtrl/utils.mk
+--- nvidia-settings-375.10.old/src/libXNVCtrl/utils.mk	2016-10-22 10:51:07.519013154 +0200
++++ nvidia-settings-375.10/src/libXNVCtrl/utils.mk	2016-10-22 10:51:40.869748667 +0200
 @@ -42,6 +42,8 @@
  LDFLAGS               ?=
  BIN_LDFLAGS           ?=
@@ -21,7 +21,7 @@ diff -Naur nvidia-settings-364.12.old/src/libXNVCtrl/utils.mk nvidia-settings-36
  HOST_CC               ?= $(CC)
  HOST_LD               ?= $(LD)
  HOST_CFLAGS           ?= $(CFLAGS)
-@@ -61,7 +63,7 @@
+@@ -63,7 +65,7 @@
  
  INSTALL               ?= install
  INSTALL_BIN_ARGS      ?= -m 755
@@ -30,9 +30,9 @@ diff -Naur nvidia-settings-364.12.old/src/libXNVCtrl/utils.mk nvidia-settings-36
  INSTALL_DOC_ARGS      ?= -m 644
  
  M4                    ?= m4
-diff -Naur nvidia-settings-364.12.old/utils.mk nvidia-settings-364.12/utils.mk
---- nvidia-settings-364.12.old/utils.mk	2016-03-22 19:38:48.851335618 +0100
-+++ nvidia-settings-364.12/utils.mk	2016-03-22 19:40:57.792490560 +0100
+diff -Naur nvidia-settings-375.10.old/utils.mk nvidia-settings-375.10/utils.mk
+--- nvidia-settings-375.10.old/utils.mk	2016-10-22 10:51:07.517013110 +0200
++++ nvidia-settings-375.10/utils.mk	2016-10-22 10:51:40.870748689 +0200
 @@ -42,6 +42,8 @@
  LDFLAGS               ?=
  BIN_LDFLAGS           ?=
@@ -42,7 +42,7 @@ diff -Naur nvidia-settings-364.12.old/utils.mk nvidia-settings-364.12/utils.mk
  HOST_CC               ?= $(CC)
  HOST_LD               ?= $(LD)
  HOST_CFLAGS           ?= $(CFLAGS)
-@@ -61,7 +63,7 @@
+@@ -63,7 +65,7 @@
  
  INSTALL               ?= install
  INSTALL_BIN_ARGS      ?= -m 755
