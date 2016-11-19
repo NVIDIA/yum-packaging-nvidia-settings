@@ -12,7 +12,7 @@ Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-375.10-defaults.patch
-Patch2:         %{name}-375.10-libXNVCtrl-so.patch
+Patch2:         %{name}-375.20-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel > 2.4
