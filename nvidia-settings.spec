@@ -15,6 +15,7 @@ Patch1:         %{name}-375.10-defaults.patch
 Patch2:         %{name}-375.20-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
+BuildRequires:  dbus-devel
 BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
 BuildRequires:  libvdpau-devel >= 1.0
