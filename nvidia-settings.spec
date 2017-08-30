@@ -78,14 +78,15 @@ sed -i '/+= -O0 -g/d' utils.mk src/libXNVCtrl/utils.mk
 sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 
 %build
+export CFLAGS="%{optflags}"
+export LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
     NVML_CFLAGS="-I %{_includedir}/cuda" \
     NVML_EXPERIMENTAL=1 \
-    PREFIX=%{_prefix}
-#X_LDFLAGS="-L%{_libdir}" \
+    PREFIX=%{_prefix} \
 
 %install
 # Install libXNVCtrl headers
@@ -93,7 +94,12 @@ mkdir -p %{buildroot}%{_includedir}/NVCtrl
 cp -af src/libXNVCtrl/*.h %{buildroot}%{_includedir}/NVCtrl/
 
 # Install main program
-%make_install INSTALL="install -p" PREFIX=%{_prefix} NV_USE_BUNDLED_LIBJANSSON=0
+%make_install \
+    DEBUG=1 \
+    NV_USE_BUNDLED_LIBJANSSON=0 \
+    NV_VERBOSE=1 \
+    PREFIX=%{_prefix}
+
 
 # Install desktop file
 mkdir -p %{buildroot}%{_datadir}/{applications,pixmaps}
@@ -105,7 +111,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora} >= 25
+%if 0%{?fedora}
 # install AppData and add modalias provides
 mkdir -p %{buildroot}%{_datadir}/appdata
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
@@ -117,19 +123,19 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 
 %post
 /sbin/ldconfig
-%if 0%{?fedora} == 24 || 0%{?fedora} == 23 || 0%{?rhel} == 7
+%if 0%{?rhel} == 7
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 
 %postun
 /sbin/ldconfig
-%if 0%{?fedora} == 24 || 0%{?fedora} == 23 || 0%{?rhel} == 7
+%if 0%{?rhel} == 7
 /usr/bin/update-desktop-database &> /dev/null || :
 %endif
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora} >= 25
+%if 0%{?fedora}
 %{_datadir}/appdata/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/%{name}.desktop
@@ -139,7 +145,6 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
 %files -n nvidia-libXNVCtrl
-%{!?_licensedir:%global license %%doc}
 %license COPYING
 %{_libdir}/libXNVCtrl.so.*
 
@@ -151,6 +156,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %changelog
 * Wed Aug 30 2017 Simone Caronni <negativo17@gmail.com> - 2:384.69-1
 - Update to 384.69.
+- Update SPEC file, set proper compiler flags on Fedora 27.
 
 * Tue Jul 25 2017 Simone Caronni <negativo17@gmail.com> - 2:384.59-1
 - Update to 384.59.
