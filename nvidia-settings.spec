@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        384.69
+Version:        384.90
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
@@ -154,6 +154,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Fri Sep 22 2017 Simone Caronni <negativo17@gmail.com> - 2:384.90-1
+- Update to 384.90.
+
 * Wed Aug 30 2017 Simone Caronni <negativo17@gmail.com> - 2:384.69-1
 - Update to 384.69.
 - Update SPEC file, set proper compiler flags on Fedora 27.
