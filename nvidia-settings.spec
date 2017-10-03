@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        384.90
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
 License:        GPLv2+
@@ -84,8 +84,6 @@ make %{?_smp_mflags} \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
-    NVML_CFLAGS="-I %{_includedir}/cuda" \
-    NVML_EXPERIMENTAL=1 \
     PREFIX=%{_prefix} \
 
 %install
@@ -154,6 +152,10 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Tue Oct 03 2017 Simone Caronni <negativo17@gmail.com> - 2:384.90-2
+- Disable NVML experimental setting. Works only on some combination of cards and
+  make the application just crash on others.
+
 * Fri Sep 22 2017 Simone Caronni <negativo17@gmail.com> - 2:384.90-1
 - Update to 384.90.
 
