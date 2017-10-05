@@ -1,6 +1,6 @@
 Name:           nvidia-settings
-Version:        384.90
-Release:        2%{?dist}
+Version:        387.12
+Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
 License:        GPLv2+
@@ -12,7 +12,7 @@ Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-375.10-defaults.patch
-Patch2:         %{name}-375.20-libXNVCtrl-so.patch
+Patch2:         %{name}-387.12-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -152,6 +152,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu Oct 05 2017 Simone Caronni <negativo17@gmail.com> - 2:387.12-1
+- Update to 387.12.
+
 * Tue Oct 03 2017 Simone Caronni <negativo17@gmail.com> - 2:384.90-2
 - Disable NVML experimental setting. Works only on some combination of cards and
   make the application just crash on others.
