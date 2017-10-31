@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        387.12
+Version:        387.22
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
@@ -152,6 +152,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Tue Oct 31 2017 Simone Caronni <negativo17@gmail.com> - 2:387.22-1
+- Update to 387.22.
+
 * Thu Oct 05 2017 Simone Caronni <negativo17@gmail.com> - 2:387.12-1
 - Update to 387.12.
 
