@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        384.111
+Version:        390.25
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          2
@@ -12,7 +12,7 @@ Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-375.10-defaults.patch
-Patch2:         %{name}-375.20-libXNVCtrl-so.patch
+Patch2:         %{name}-387.12-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -152,6 +152,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Tue Jan 30 2018 Simone Caronni <negativo17@gmail.com> - 2:390.25-1
+- Update to 390.25.
+
 * Thu Jan 11 2018 Simone Caronni <negativo17@gmail.com> - 2:384.111-1
 - Update to 384.111.
 
