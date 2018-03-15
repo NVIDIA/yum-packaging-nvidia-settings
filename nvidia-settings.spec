@@ -1,6 +1,6 @@
 Name:           nvidia-settings
-Version:        390.25
-Release:        2%{?dist}
+Version:        390.42
+Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -152,6 +152,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu Mar 15 2018 Simone Caronni <negativo17@gmail.com> - 3:390.42-1
+- Update to 390.42.
+
 * Tue Feb 27 2018 Simone Caronni <negativo17@gmail.com> - 3:390.25-2
 - Align Epoch with other components.
 
