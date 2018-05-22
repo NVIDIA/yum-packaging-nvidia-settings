@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        390.48
+Version:        390.59
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -152,6 +152,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Tue May 22 2018 Simone Caronni <negativo17@gmail.com> - 3:390.59-1
+- Update to 390.59.
+
 * Tue Apr 03 2018 Simone Caronni <negativo17@gmail.com> - 3:390.48-1
 - Update to 390.48.
 
