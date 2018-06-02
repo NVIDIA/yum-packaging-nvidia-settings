@@ -24,6 +24,7 @@ BuildRequires:  libXext-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  libXv-devel
 BuildRequires:  m4
+BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
