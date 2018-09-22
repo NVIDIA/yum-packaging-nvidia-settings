@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        396.54
+Version:        410.57
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -153,6 +153,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Sat Sep 22 2018 Simone Caronni <negativo17@gmail.com> - 3:410.57-1
+- Update to 410.57.
+
 * Wed Aug 22 2018 Simone Caronni <negativo17@gmail.com> - 3:396.54-1
 - Update to 396.54.
 
