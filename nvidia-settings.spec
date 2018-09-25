@@ -16,6 +16,7 @@ Patch2:         %{name}-387.12-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
+BuildRequires:  gcc
 BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
 BuildRequires:  libvdpau-devel >= 1.0
