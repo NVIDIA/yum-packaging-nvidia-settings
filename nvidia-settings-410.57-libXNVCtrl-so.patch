@@ -1,6 +1,6 @@
-diff -Naur nvidia-settings-387.12.old/src/libXNVCtrl/Makefile nvidia-settings-387.12/src/libXNVCtrl/Makefile
---- nvidia-settings-387.12.old/src/libXNVCtrl/Makefile	2017-10-05 08:51:44.949208854 +0200
-+++ nvidia-settings-387.12/src/libXNVCtrl/Makefile	2017-10-05 08:52:46.384309222 +0200
+diff -Naur nvidia-settings-410.57.old/src/libXNVCtrl/Makefile nvidia-settings-410.57/src/libXNVCtrl/Makefile
+--- nvidia-settings-410.57.old/src/libXNVCtrl/Makefile	2018-09-25 21:51:03.794718036 +0200
++++ nvidia-settings-410.57/src/libXNVCtrl/Makefile	2018-09-25 21:51:14.815916043 +0200
 @@ -31,7 +31,7 @@
  # assign variables
  ##############################################################################
@@ -10,7 +10,7 @@ diff -Naur nvidia-settings-387.12.old/src/libXNVCtrl/Makefile nvidia-settings-38
  
  LIBXNVCTRL_PROGRAM_NAME = "libXNVCtrl"
  
-@@ -59,8 +59,11 @@
+@@ -58,8 +58,11 @@
  
  all: $(LIBXNVCTRL)
  
@@ -24,9 +24,9 @@ diff -Naur nvidia-settings-387.12.old/src/libXNVCtrl/Makefile nvidia-settings-38
  
  # define the rule to build each object file
  $(foreach src,$(SRC),$(eval $(call DEFINE_OBJECT_RULE,TARGET,$(src))))
-diff -Naur nvidia-settings-387.12.old/src/Makefile nvidia-settings-387.12/src/Makefile
---- nvidia-settings-387.12.old/src/Makefile	2017-10-05 08:51:44.943208746 +0200
-+++ nvidia-settings-387.12/src/Makefile	2017-10-05 08:52:46.387309275 +0200
+diff -Naur nvidia-settings-410.57.old/src/Makefile nvidia-settings-410.57/src/Makefile
+--- nvidia-settings-410.57.old/src/Makefile	2018-09-25 21:51:03.793718017 +0200
++++ nvidia-settings-410.57/src/Makefile	2018-09-25 21:52:06.743848992 +0200
 @@ -110,9 +110,12 @@
  # assignments should be used)
  ##############################################################################
@@ -41,7 +41,7 @@ diff -Naur nvidia-settings-387.12.old/src/Makefile nvidia-settings-387.12/src/Ma
  XCONFIG_PARSER_DIR      ?= XF86Config-parser
  COMMON_UTILS_DIR        ?= common-utils
  COMMON_UNIX_DIR         ?= common-unix
-@@ -284,11 +287,18 @@
+@@ -280,11 +283,18 @@
  NVIDIA_SETTINGS_install: $(NVIDIA_SETTINGS)
  	$(MKDIR) $(BINDIR)
  	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
@@ -62,11 +62,11 @@ diff -Naur nvidia-settings-387.12.old/src/Makefile nvidia-settings-387.12/src/Ma
  
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
  $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
-@@ -322,6 +332,7 @@
+@@ -315,6 +325,7 @@
  	@$(MAKE) -C $(XNVCTRL_DIR) -f $(XNVCTRL_MAKEFILE)
  
  clean clobber:
 +	$(MAKE) -C $(XNVCTRL_DIR) clean
- 	rm -rf $(NVIDIA_SETTINGS) *~ $(STAMP_C) \
+ 	rm -rf $(NVIDIA_SETTINGS) *~ \
  		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d \
  		$(GTK2LIB) $(GTK3LIB) $(GTK2LIB_DIR) $(GTK3LIB_DIR) \
