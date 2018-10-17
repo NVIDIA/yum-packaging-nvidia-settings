@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        390.87
+Version:        410.66
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -12,10 +12,11 @@ Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-367.44-validate.patch
 Patch1:         %{name}-375.10-defaults.patch
-Patch2:         %{name}-387.12-libXNVCtrl-so.patch
+Patch2:         %{name}-410.57-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
+BuildRequires:  gcc
 BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
 BuildRequires:  libvdpau-devel >= 1.0
@@ -24,6 +25,7 @@ BuildRequires:  libXext-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  libXv-devel
 BuildRequires:  m4
+BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
@@ -152,6 +154,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Wed Oct 17 2018 Simone Caronni <negativo17@gmail.com> - 3:410.66-1
+- Update to 410.66.
+
 * Thu Sep 06 2018 Simone Caronni <negativo17@gmail.com> - 3:390.87-1
 - Update to 390.87.
 
