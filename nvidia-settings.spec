@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        418.56
+Version:        418.74
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -154,6 +154,9 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu May 09 2019 Simone Caronni <negativo17@gmail.com> - 3:418.74-1
+- Update to 418.74.
+
 * Sun Mar 24 2019 Simone Caronni <negativo17@gmail.com> - 3:418.56-1
 - Update to 418.56.
 
