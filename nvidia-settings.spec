@@ -80,7 +80,7 @@ sed -i '/+= -O0 -g/d' utils.mk src/libXNVCtrl/utils.mk
 sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 
 %build
-export CFLAGS="%{optflags}"
+export CFLAGS="%{optflags} -fPIC"
 export LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} \
     DEBUG=1 \
