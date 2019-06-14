@@ -1,0 +1,47 @@
+diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Makefile
+--- nvidia-settings-430.26.old/src/Makefile	2019-06-15 13:36:23.718337306 +0200
++++ nvidia-settings-430.26/src/Makefile	2019-06-15 13:37:04.210092151 +0200
+@@ -42,7 +42,7 @@
+ endif
+ 
+ ifndef GTK2_LDFLAGS
+-  GTK2_LDFLAGS         := -Wl,--no-as-needed $(shell $(PKG_CONFIG) --libs gtk+-2.0)
++  GTK2_LDFLAGS         := $(shell $(PKG_CONFIG) --libs gtk+-2.0)
+ endif
+ 
+ ifndef GTK3_AVAILABLE
+@@ -55,7 +55,7 @@
+   endif
+ 
+   ifndef GTK3_LDFLAGS
+-    GTK3_LDFLAGS         := -Wl,--no-as-needed $(shell $(PKG_CONFIG) --libs gtk+-3.0)
++    GTK3_LDFLAGS         := $(shell $(PKG_CONFIG) --libs gtk+-3.0)
+   endif
+ else
+   GTK3_CFLAGS ?=
+@@ -280,19 +280,19 @@
+ $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
+ $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+ 	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
+-	    $(LIBXNVCTRL) $(LIBS) $(GTK2_LIBS) \
+-	    -Wl,--unresolved-symbols=ignore-all -o $@ \
++	    -o $@ \
+ 	    -Wl,-soname -Wl,$(GTK2LIB_SONAME) \
+-	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS)
++	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS) \
++	    $(LIBXNVCTRL) $(LIBS) $(GTK2_LIBS)
+ 
+ ifdef BUILD_GTK3LIB
+ $(eval $(call DEBUG_INFO_RULES, $(GTK3LIB)))
+ $(GTK3LIB).unstripped: $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+ 	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS)  $(BIN_LDFLAGS) \
+-	    $(LIBXNVCTRL) $(LIBS) $(GTK3_LIBS) \
+-	    -Wl,--unresolved-symbols=ignore-all -o $@ \
++	    -o $@ \
+ 	    -Wl,-soname -Wl,$(GTK3LIB_SONAME) \
+-	    $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS)
++	    $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) \
++	    $(LIBXNVCTRL) $(LIBS) $(GTK3_LIBS)
+ endif
+ 
+ # define the rule to build each object file

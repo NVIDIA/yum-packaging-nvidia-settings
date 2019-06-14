@@ -10,14 +10,13 @@ ExclusiveArch:  %{ix86} x86_64
 Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
-Patch0:         %{name}-367.44-validate.patch
-Patch1:         %{name}-375.10-defaults.patch
-Patch2:         %{name}-410.57-libXNVCtrl-so.patch
+Patch0:         %{name}-desktop.patch
+Patch1:         %{name}-link-order.patch
+Patch2:         %{name}-libXNVCtrl.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
 BuildRequires:  gcc
-BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
 BuildRequires:  libvdpau-devel >= 1.0
 BuildRequires:  libXxf86vm-devel
@@ -30,6 +29,8 @@ BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gtk3-devel
+%else
+BuildRequires:  gtk2-devel > 2.4
 %endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
@@ -65,10 +66,7 @@ This devel package contains libraries and header files for
 developing applications that use the NV-CONTROL API.
 
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%autosetup -p1
 
 # Remove bundled jansson
 rm -fr src/jansson
@@ -80,13 +78,14 @@ sed -i '/+= -O0 -g/d' utils.mk src/libXNVCtrl/utils.mk
 sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 
 %build
-export CFLAGS="%{optflags}"
+export CFLAGS="%{optflags} -fPIC"
 export LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
     PREFIX=%{_prefix} \
+    XNVCTRL_LDFLAGS="-L%{_libdir}"
 
 %install
 # Install libXNVCtrl headers
@@ -100,12 +99,10 @@ cp -af src/libXNVCtrl/*.h %{buildroot}%{_includedir}/NVCtrl/
     NV_VERBOSE=1 \
     PREFIX=%{_prefix}
 
-
 # Install desktop file
 mkdir -p %{buildroot}%{_datadir}/{applications,pixmaps}
 desktop-file-install --dir %{buildroot}%{_datadir}/applications/ doc/%{name}.desktop
 cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
@@ -117,21 +114,12 @@ mkdir -p %{buildroot}%{_datadir}/appdata
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %endif
 
-%post -n nvidia-libXNVCtrl -p /sbin/ldconfig
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
-%postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
+%ldconfig_scriptlets
 
-%post
-/sbin/ldconfig
-%if 0%{?rhel} == 7
-/usr/bin/update-desktop-database &> /dev/null || :
-%endif
-
-%postun
-/sbin/ldconfig
-%if 0%{?rhel} == 7
-/usr/bin/update-desktop-database &> /dev/null || :
-%endif
+%ldconfig_scriptlets -n nvidia-libXNVCtrl
 
 %files
 %{_bindir}/%{name}
@@ -156,6 +144,8 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %changelog
 * Wed Jun 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-1
 - Update to 430.26.
+- Update patches.
+- Update SPEC file.
 
 * Sat May 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.14-1
 - Update to 430.14.
