@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        430.26
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -148,6 +148,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-2
+- Revert libXNVCtrl soname to libXNVCtrl.so.0.
+
 * Wed Jun 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-1
 - Update to 430.26.
 - Update patches.

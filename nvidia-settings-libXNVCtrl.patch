@@ -31,8 +31,8 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
 +
 +$(LIBXNVCTRL_SHARED): $(LIBXNVCTRL_OBJ)
 +	$(RM) $@ $@.*
-+	$(CC) -shared -Wl,-soname=$@.$(NVIDIA_VERSION) -o $@.$(NVIDIA_VERSION) $(LDFLAGS) $^ -lXext -lX11
-+	ln -s $@.$(NVIDIA_VERSION) $@
++	$(CC) -shared -Wl,-soname=$@.0 -o $@.0 $(LDFLAGS) $^ -lXext -lX11
++	ln -s $@.0 $@
 diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Makefile
 --- nvidia-settings-430.26.old/src/Makefile	2019-06-15 13:37:48.295913992 +0200
 +++ nvidia-settings-430.26/src/Makefile	2019-06-15 13:49:23.204694493 +0200
@@ -46,7 +46,7 @@ diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Ma
 +NVIDIA_XNVCTRL_install:
 +	$(MKDIR) $(LIBDIR)
 +	$(INSTALL) $(INSTALL_LIB_ARGS) $(LIBXNVCTRL_SHARED) \
-+		$(LIBDIR)/$(LIBXNVCTRL_SHARED).$(NVIDIA_VERSION)
++		$(LIBDIR)/$(LIBXNVCTRL_SHARED).0
 +	ln -s $(LIBXNVCTRL_SHARED).$(NVIDIA_VERSION) \
 +		$(LIBDIR)/$(LIBXNVCTRL_SHARED)
  
