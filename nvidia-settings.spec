@@ -13,6 +13,7 @@ Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
 Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
+Patch3:         %{name}-lib-permissions.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
