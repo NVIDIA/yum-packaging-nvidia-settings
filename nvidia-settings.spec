@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        430.26
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -148,6 +148,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Tue Jun 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-3
+- Fix rpm message when upgrading from Fedora's libXNVCtrl.
+
 * Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-2
 - Revert libXNVCtrl soname to libXNVCtrl.so.0.
 
