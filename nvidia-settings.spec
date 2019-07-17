@@ -80,6 +80,10 @@ Requires:       nvidia-libXNVCtrl-%{_named_version} = %{?epoch}:%{version}
 Requires:       libX11-devel
 Provides:       nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
+%if 0%{?is_dkms} == 1
+Obsoletes:	libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
+%endif
+
 %description -n nvidia-libXNVCtrl-%{_named_version}-devel
 This devel package contains libraries and header files for
 developing applications that use the NV-CONTROL API.
