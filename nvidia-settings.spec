@@ -41,9 +41,15 @@ Requires:       nvidia-driver-%{_named_version}%{?_isa} = %{?epoch}:%{version}
 # Loaded at runtime
 Requires:       libvdpau%{?_isa} >= 0.9
 
+%if 0%{?is_dkms} == 1
 Obsoletes:      nvidia-settings-desktop < %{?epoch}:%{version}-%{release}
+%endif
+
 Provides:       %{_basename} = %{?epoch:%{epoch}:}%{version}-%{release}
-#Obsoletes:      %{_basename} < %{?epoch:%{epoch}:}%{version}-%{release}
+
+%if 0%{?is_dkms} == 1
+Obsoletes:      %{_basename} < %{?epoch:%{epoch}:}%{version}-%{release}
+%endif
 
 %description
 The %{_basename} utility is a tool for configuring the NVIDIA graphics
@@ -55,7 +61,11 @@ This communication is done with the NV-CONTROL X extension.
 %package -n nvidia-libXNVCtrl-%{_named_version}
 Summary:        Library providing the NV-CONTROL API
 Requires:       nvidia-driver-%{_named_version}%{?_isa} = %{?epoch}:%{version}
-#Obsoletes:      libXNVCtrl < %{?epoch}:%{version}-%{release}
+
+%if 0%{?is_dkms} == 1
+Obsoletes:      libXNVCtrl < %{?epoch}:%{version}-%{release}
+%endif
+
 Provides:       libXNVCtrl = %{?epoch}:%{version}-%{release}
 Provides:       nvidia-libXNVCtrl = %{?epoch:%{epoch}:}%{version}-%{release}
 
