@@ -64,6 +64,7 @@ Requires:       nvidia-driver-%{_named_version}%{?_isa} = %{?epoch}:%{version}
 
 %if 0%{?is_dkms} == 1
 Obsoletes:      libXNVCtrl < %{?epoch}:%{version}-%{release}
+Obsoletes:      nvidia-libXNVCtrl < %{?epoch}:%{version}-%{release}
 %endif
 
 Provides:       libXNVCtrl = %{?epoch}:%{version}-%{release}
@@ -82,6 +83,7 @@ Provides:       nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
 %if 0%{?is_dkms} == 1
 Obsoletes:	libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
+Obsoletes:      nvidia-libXNVCtrl-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 %endif
 
 %description -n nvidia-libXNVCtrl-%{_named_version}-devel
