@@ -31,7 +31,7 @@ BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gtk3-devel
-%else
+BuildRequires:  libappstream-glib
 %endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
@@ -107,16 +107,17 @@ cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
 
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 7
 # install AppData and add modalias provides
-mkdir -p %{buildroot}%{_datadir}/appdata
-install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
+mkdir -p %{buildroot}%{_metainfodir}/
+install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
 %endif
 
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
+appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
 
 %ldconfig_scriptlets
 
@@ -124,8 +125,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora}
-%{_datadir}/appdata/%{name}.appdata.xml
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%{_metainfodir}/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
@@ -150,6 +151,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %changelog
 * Wed Jul 31 2019 Simone Caronni <negativo17@gmail.com> - 3:430.40-1
 - Update to 430.40.
+- Update AppData installation.
 
 * Fri Jul 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.34-1
 - Update to 430.34.
