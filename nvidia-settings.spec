@@ -2,7 +2,7 @@
 
 %define _named_version %{driver_branch}
 
-Name:           %{_basename}-%{_named_version}
+Name:           %{_basename}
 Version:        410.73
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
@@ -36,8 +36,8 @@ BuildRequires:  mesa-libGL-devel
 BuildRequires:  gtk3-devel
 %endif
 
-Requires:       nvidia-libXNVCtrl-%{_named_version}%{?_isa} = %{?epoch}:%{version}
-Requires:       nvidia-driver-%{_named_version}%{?_isa} = %{?epoch}:%{version}
+Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}
+Requires:       nvidia-driver = %{?epoch}:%{version}
 # Loaded at runtime
 Requires:       libvdpau%{?_isa} >= 0.9
 
@@ -58,9 +58,9 @@ updating state as appropriate.
 
 This communication is done with the NV-CONTROL X extension.
 
-%package -n nvidia-libXNVCtrl-%{_named_version}
+%package -n nvidia-libXNVCtrl
 Summary:        Library providing the NV-CONTROL API
-Requires:       nvidia-driver-%{_named_version}%{?_isa} = %{?epoch}:%{version}
+Requires:       nvidia-driver = %{?epoch}:%{version}
 
 %if 0%{?is_dkms} == 1
 Obsoletes:      libXNVCtrl < %{?epoch}:%{version}-%{release}
@@ -70,14 +70,14 @@ Obsoletes:      nvidia-libXNVCtrl < %{?epoch}:%{version}-%{release}
 Provides:       libXNVCtrl = %{?epoch}:%{version}-%{release}
 Provides:       nvidia-libXNVCtrl = %{?epoch:%{epoch}:}%{version}-%{release}
 
-%description -n nvidia-libXNVCtrl-%{_named_version}
+%description -n nvidia-libXNVCtrl
 This library provides the NV-CONTROL API for communicating with the proprietary
 NVidia xorg driver. It is required for proper operation of the %{_basename} utility.
 
-%package -n nvidia-libXNVCtrl-%{_named_version}-devel
+%package -n nvidia-libXNVCtrl-devel
 Summary:        Development files for libXNVCtrl
-Requires:       nvidia-driver-%{_named_version}%{?_isa} = %{?epoch}:%{version}
-Requires:       nvidia-libXNVCtrl-%{_named_version} = %{?epoch}:%{version}
+Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
+Requires:       nvidia-libXNVCtrl = %{?epoch}:%{version}
 Requires:       libX11-devel
 Provides:       nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
@@ -86,7 +86,7 @@ Obsoletes:	libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 %endif
 
-%description -n nvidia-libXNVCtrl-%{_named_version}-devel
+%description -n nvidia-libXNVCtrl-devel
 This devel package contains libraries and header files for
 developing applications that use the NV-CONTROL API.
 
@@ -143,9 +143,9 @@ mkdir -p %{buildroot}%{_datadir}/appdata
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %endif
 
-%post -n nvidia-libXNVCtrl-%{_named_version} -p /sbin/ldconfig
+%post -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
-%postun -n nvidia-libXNVCtrl-%{_named_version} -p /sbin/ldconfig
+%postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
 %post
 /sbin/ldconfig
@@ -170,7 +170,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_mandir}/man1/%{_basename}.*
 %{_sysconfdir}/xdg/autostart/%{_basename}-load.desktop
 
-%files -n nvidia-libXNVCtrl-%{_named_version}
+%files -n nvidia-libXNVCtrl
 %if 0%{?rhel} == 6
 %doc COPYING
 %else
@@ -178,7 +178,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %endif
 %{_libdir}/libXNVCtrl.so.*
 
-%files -n nvidia-libXNVCtrl-%{_named_version}-devel
+%files -n nvidia-libXNVCtrl-devel
 %doc doc/NV-CONTROL-API.txt doc/FRAMELOCK.txt
 %{_includedir}/NVCtrl
 %{_libdir}/libXNVCtrl.so
