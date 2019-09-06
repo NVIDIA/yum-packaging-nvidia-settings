@@ -1,8 +1,4 @@
-%global _basename nvidia-settings
-
-%define _named_version %{driver_branch}
-
-Name:           %{_basename}
+Name:           nvidia-settings
 Version:        410.73
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
@@ -11,12 +7,12 @@ License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
 ExclusiveArch:  %{ix86} x86_64 ppc64le
 
-Source0:        https://download.nvidia.com/XFree86/%{_basename}/%{_basename}-%{version}.tar.bz2
-Source1:        %{_basename}-load.desktop
-Source2:        %{_basename}.appdata.xml
-Patch0:         %{_basename}-367.44-validate.patch
-Patch1:         %{_basename}-375.10-defaults.patch
-Patch2:         %{_basename}-410.57-libXNVCtrl-so.patch
+Source0:        https://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-%{version}.tar.bz2
+Source1:        nvidia-settings-load.desktop
+Source2:        nvidia-settings.appdata.xml
+Patch0:         nvidia-settings-367.44-validate.patch
+Patch1:         nvidia-settings-375.10-defaults.patch
+Patch2:         nvidia-settings-410.57-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -41,18 +37,13 @@ Requires:       nvidia-driver = %{?epoch}:%{version}
 # Loaded at runtime
 Requires:       libvdpau%{?_isa} >= 0.9
 
-%if 0%{?is_dkms} == 1
 Obsoletes:      nvidia-settings-desktop < %{?epoch}:%{version}-%{release}
-%endif
+Obsoletes:      nvidia-settings < %{?epoch:%{epoch}:}%{version}-%{release}
 
-Provides:       %{_basename} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%if 0%{?is_dkms} == 1
-Obsoletes:      %{_basename} < %{?epoch:%{epoch}:}%{version}-%{release}
-%endif
+Provides:       nvidia-settings = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description
-The %{_basename} utility is a tool for configuring the NVIDIA graphics
+The nvidia-settings utility is a tool for configuring the NVIDIA graphics
 driver. It operates by communicating with the NVIDIA X driver, querying and
 updating state as appropriate.
 
@@ -62,17 +53,15 @@ This communication is done with the NV-CONTROL X extension.
 Summary:        Library providing the NV-CONTROL API
 Requires:       nvidia-driver = %{?epoch}:%{version}
 
-%if 0%{?is_dkms} == 1
 Obsoletes:      libXNVCtrl < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl < %{?epoch}:%{version}-%{release}
-%endif
 
 Provides:       libXNVCtrl = %{?epoch}:%{version}-%{release}
 Provides:       nvidia-libXNVCtrl = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n nvidia-libXNVCtrl
 This library provides the NV-CONTROL API for communicating with the proprietary
-NVidia xorg driver. It is required for proper operation of the %{_basename} utility.
+NVidia xorg driver. It is required for proper operation of the nvidia-settings utility.
 
 %package -n nvidia-libXNVCtrl-devel
 Summary:        Development files for libXNVCtrl
@@ -81,10 +70,8 @@ Requires:       nvidia-libXNVCtrl = %{?epoch}:%{version}
 Requires:       libX11-devel
 Provides:       nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
-%if 0%{?is_dkms} == 1
-Obsoletes:	libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
+Obsoletes:	    libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl-devel < %{?epoch:%{epoch}:}%{version}-%{release}
-%endif
 
 %description -n nvidia-libXNVCtrl-devel
 This devel package contains libraries and header files for
@@ -129,13 +116,13 @@ cp -af src/libXNVCtrl/*.h %{buildroot}%{_includedir}/NVCtrl/
 
 # Install desktop file
 mkdir -p %{buildroot}%{_datadir}/{applications,pixmaps}
-desktop-file-install --dir %{buildroot}%{_datadir}/applications/ doc/%{_basename}.desktop
-cp doc/%{_basename}.png %{buildroot}%{_datadir}/pixmaps/
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{_basename}.desktop
+desktop-file-install --dir %{buildroot}%{_datadir}/applications/ doc/nvidia-settings.desktop
+cp doc/nvidia-settings.png %{buildroot}%{_datadir}/pixmaps/
+desktop-file-validate %{buildroot}/%{_datadir}/applications/nvidia-settings.desktop
 
 # Install autostart file to load settings at login
-install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{_basename}-load.desktop
-desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{_basename}-load.desktop
+install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
+desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
 
 %if 0%{?fedora}
 # install AppData and add modalias provides
@@ -160,15 +147,15 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %endif
 
 %files
-%{_bindir}/%{_basename}
+%{_bindir}/nvidia-settings
 %if 0%{?fedora}
-%{_datadir}/appdata/%{_basename}.appdata.xml
+%{_datadir}/appdata/nvidia-settings.appdata.xml
 %endif
-%{_datadir}/applications/%{_basename}.desktop
-%{_datadir}/pixmaps/%{_basename}.png
+%{_datadir}/applications/nvidia-settings.desktop
+%{_datadir}/pixmaps/nvidia-settings.png
 %{_libdir}/libnvidia-gtk*.so.%{version}
-%{_mandir}/man1/%{_basename}.*
-%{_sysconfdir}/xdg/autostart/%{_basename}-load.desktop
+%{_mandir}/man1/nvidia-settings.*
+%{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
 
 %files -n nvidia-libXNVCtrl
 %if 0%{?rhel} == 6
