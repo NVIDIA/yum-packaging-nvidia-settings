@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        410.73
+Version:        435.21
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -30,6 +30,7 @@ BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gtk3-devel
+BuildRequires:  libappstream-glib
 %endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}
@@ -39,7 +40,6 @@ Requires:       libvdpau%{?_isa} >= 0.9
 
 Obsoletes:      nvidia-settings-desktop < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-settings < %{?epoch:%{epoch}:}%{version}-%{release}
-
 Provides:       nvidia-settings = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description
@@ -68,9 +68,9 @@ Summary:        Development files for libXNVCtrl
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
 Requires:       nvidia-libXNVCtrl = %{?epoch}:%{version}
 Requires:       libX11-devel
-Provides:       nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
+Provides:	nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
-Obsoletes:	    libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
+Obsoletes:	libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n nvidia-libXNVCtrl-devel
@@ -100,6 +100,7 @@ make %{?_smp_mflags} \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
     PREFIX=%{_prefix} \
+    XNVCTRL_LDFLAGS="-L%{_libdir}"
 
 %install
 # Install libXNVCtrl headers
@@ -112,7 +113,6 @@ cp -af src/libXNVCtrl/*.h %{buildroot}%{_includedir}/NVCtrl/
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
     PREFIX=%{_prefix}
-
 
 # Install desktop file
 mkdir -p %{buildroot}%{_datadir}/{applications,pixmaps}
@@ -158,11 +158,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
 
 %files -n nvidia-libXNVCtrl
-%if 0%{?rhel} == 6
-%doc COPYING
-%else
 %license COPYING
-%endif
 %{_libdir}/libXNVCtrl.so.*
 
 %files -n nvidia-libXNVCtrl-devel
@@ -171,6 +167,64 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
+- Update to 435.21.
+
+* Thu Aug 22 2019 Simone Caronni <negativo17@gmail.com> - 3:435.17-1
+- Update to 435.17.
+
+* Wed Jul 31 2019 Simone Caronni <negativo17@gmail.com> - 3:430.40-1
+- Update to 430.40.
+- Update AppData installation.
+
+* Fri Jul 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.34-1
+- Update to 430.34.
+
+* Tue Jun 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-3
+- Fix rpm message when upgrading from Fedora's libXNVCtrl.
+
+* Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-2
+- Revert libXNVCtrl soname to libXNVCtrl.so.0.
+
+* Wed Jun 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-1
+- Update to 430.26.
+- Update patches.
+- Update SPEC file.
+
+* Sat May 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.14-1
+- Update to 430.14.
+
+* Thu May 09 2019 Simone Caronni <negativo17@gmail.com> - 3:418.74-1
+- Update to 418.74.
+
+* Sun Mar 24 2019 Simone Caronni <negativo17@gmail.com> - 3:418.56-1
+- Update to 418.56.
+
+* Fri Feb 22 2019 Simone Caronni <negativo17@gmail.com> - 3:418.43-1
+- Update to 418.43.
+- Trim changelog.
+
+* Wed Feb 06 2019 Simone Caronni <negativo17@gmail.com> - 3:418.30-1
+- Update to 418.30.
+
+* Thu Jan 17 2019 Simone Caronni <negativo17@gmail.com> - 3:415.27-1
+- Update to 415.27.
+
+* Thu Dec 20 2018 Simone Caronni <negativo17@gmail.com> - 3:415.25-1
+- Update to 415.25.
+
+* Fri Dec 14 2018 Simone Caronni <negativo17@gmail.com> - 3:415.23-1
+- Update to 415.23.
+
+* Sun Dec 09 2018 Simone Caronni <negativo17@gmail.com> - 3:415.22-1
+- Update to 415.22.
+
+* Thu Nov 22 2018 Simone Caronni <negativo17@gmail.com> - 3:415.18-1
+- Update to 415.18.
+
+* Mon Nov 19 2018 Simone Caronni <negativo17@gmail.com> - 3:410.78-1
+- Update to 410.78.
+
 * Fri Oct 26 2018 Simone Caronni <negativo17@gmail.com> - 3:410.73-1
 - Update to 410.73.
 
