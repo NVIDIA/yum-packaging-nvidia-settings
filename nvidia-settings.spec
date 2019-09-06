@@ -120,19 +120,6 @@ cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
-# install AppData and add modalias provides
-mkdir -p %{buildroot}%{_metainfodir}/
-install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
-%endif
-
-%check
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
-desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 7
-appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
-%endif
-
 %post -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
 %postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
@@ -152,7 +139,6 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %files
 %{_bindir}/%{name}
 %if 0%{?fedora} || 0%{?rhel} >= 7
-%{_metainfodir}/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
