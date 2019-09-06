@@ -10,9 +10,10 @@ ExclusiveArch:  %{ix86} x86_64 ppc64le
 Source0:        https://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-%{version}.tar.bz2
 Source1:        nvidia-settings-load.desktop
 Source2:        nvidia-settings.appdata.xml
-Patch0:         nvidia-settings-367.44-validate.patch
-Patch1:         nvidia-settings-375.10-defaults.patch
-Patch2:         nvidia-settings-410.57-libXNVCtrl-so.patch
+Patch0:         nvidia-settings-desktop.patch
+Patch1:         nvidia-settings-link-order.patch
+Patch2:         nvidia-settings-libXNVCtrl.patch
+Patch3:         nvidia-settings-lib-permissions.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -68,9 +69,9 @@ Summary:        Development files for libXNVCtrl
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
 Requires:       nvidia-libXNVCtrl = %{?epoch}:%{version}
 Requires:       libX11-devel
-Provides:	nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
+Provides:		nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
-Obsoletes:	libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
+Obsoletes:		libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n nvidia-libXNVCtrl-devel
@@ -78,10 +79,7 @@ This devel package contains libraries and header files for
 developing applications that use the NV-CONTROL API.
 
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%autosetup -p1
 
 # Remove bundled jansson
 rm -fr src/jansson
@@ -124,10 +122,17 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/nvidia-settings.desk
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 7
 # install AppData and add modalias provides
 mkdir -p %{buildroot}%{_datadir}/appdata
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
+%endif
+
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/nvidia-settings.desktop
+desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
+%if 0%{?fedora} || 0%{?rhel} >= 7
+appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/nvidia-settings.appdata.xml
 %endif
 
 %post -n nvidia-libXNVCtrl -p /sbin/ldconfig
@@ -153,7 +158,12 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %endif
 %{_datadir}/applications/nvidia-settings.desktop
 %{_datadir}/pixmaps/nvidia-settings.png
-%{_libdir}/libnvidia-gtk*.so.%{version}
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%{_libdir}/libnvidia-gtk3.so.%{version}
+%exclude %{_libdir}/libnvidia-gtk2.so.%{version}
+%else
+%{_libdir}/libnvidia-gtk2.so.%{version}
+%endif
 %{_mandir}/man1/nvidia-settings.*
 %{_sysconfdir}/xdg/autostart/nvidia-settings-load.desktop
 
