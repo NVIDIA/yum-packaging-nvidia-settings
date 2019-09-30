@@ -39,6 +39,7 @@ Requires:       nvidia-driver = %{?epoch}:%{version}
 # Loaded at runtime
 Requires:       libvdpau%{?_isa} >= 0.9
 
+Obsoletes:      nvidia-settings-latest-dkms < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-settings-desktop < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-settings < %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       nvidia-settings = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -56,6 +57,7 @@ Requires:       nvidia-driver = %{?epoch}:%{version}
 
 Obsoletes:      libXNVCtrl < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl < %{?epoch}:%{version}-%{release}
+Obsoletes:      nvidia-libXNVCtrl-latest-dkms < %{?epoch}:%{version}-%{release}
 
 Provides:       libXNVCtrl = %{?epoch}:%{version}-%{release}
 Provides:       nvidia-libXNVCtrl = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -73,6 +75,7 @@ Provides:       nvidia-libXNVCtrl-devel = %{?epoch:%{epoch}:}%{version}
 
 Obsoletes:      libXNVCtrl-devel < %{?epoch}:%{version}-%{release}
 Obsoletes:      nvidia-libXNVCtrl-devel < %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      nvidia-libXNVCtrl-latest-dkms-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n nvidia-libXNVCtrl-devel
 This devel package contains libraries and header files for
