@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        440.31
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -151,6 +151,9 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Sun Nov 17 2019 Simone Caronni <negativo17@gmail.com> - 3:440.31-2
+- Fix full libXNVCtrl libraries instead of symlinks in CentOS/RHEL 6/7.
+
 * Mon Nov 11 2019 Simone Caronni <negativo17@gmail.com> - 3:440.31-1
 - Update to 440.31.
 
