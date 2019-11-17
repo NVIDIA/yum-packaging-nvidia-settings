@@ -46,7 +46,7 @@ diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Ma
 +
 +NVIDIA_XNVCTRL_install:
 +	$(MKDIR) $(LIBDIR)
-+	cp $(LIBXNVCTRL_SHARED)* $(LIBDIR)
++	cp -d $(LIBXNVCTRL_SHARED)* $(LIBDIR)
  
  NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
  	$(MKDIR) $(LIBDIR)
