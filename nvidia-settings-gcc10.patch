@@ -1,0 +1,54 @@
+From 292dcc6c02e615e73791f67cdf76b5d191657822 Mon Sep 17 00:00:00 2001
+From: Jeroen Roovers <jer@gentoo.org>
+Date: Mon, 27 Jan 2020 20:49:20 +0100
+Subject: [PATCH] ctkvdpau: Fix CFLAGS=-fno-common
+
+GCC 10 will enable -fno-common by default[0], which causes the linker to
+fail like this [1], even for older GCC versions for which it is
+explicitly enabled:
+
+```
+/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../x86_64-pc-linux-gnu/bin/ld:
+./gtk3/ctkvdpau.o:/home/jer/portage/x11-drivers/nvidia-drivers-440.44-r1/work/nvidia-settings-440.44/src/gtk+-2.x/ctkvdpau.h:70:
+multiple definition of `VDPAUDeviceFunctions';
+./gtk3/ctkwindow.o:/home/jer/portage/x11-drivers/nvidia-drivers-440.44-r1/work/nvidia-settings-440.44/src/gtk+-2.x/ctkvdpau.h:70:
+first defined here
+
+```
+
+Fix this by declaring VDPAUDeviceFunctions as extern and by defining it
+explicitly.
+
+[0] https://gcc.gnu.org/gcc-10/porting_to.html#common
+[1] https://bugs.gentoo.org/706742
+---
+ src/gtk+-2.x/ctkvdpau.c | 2 ++
+ src/gtk+-2.x/ctkvdpau.h | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/gtk+-2.x/ctkvdpau.c b/src/gtk+-2.x/ctkvdpau.c
+index 2f120f0..315243f 100644
+--- a/src/gtk+-2.x/ctkvdpau.c
++++ b/src/gtk+-2.x/ctkvdpau.c
+@@ -103,6 +103,8 @@ const gchar* __video_mixer_parameter_help =
+ const gchar* __video_mixer_attribute_help =
+ "This shows the video mixer attributes and any applicable ranges.";
+ 
++struct VDPAUDeviceImpl VDPAUDeviceFunctions;
++
+ static int queryOutputSurface(CtkVDPAU *ctk_vdpau, VdpDevice device,
+                               VdpGetProcAddress *getProcAddress);
+ 
+diff --git a/src/gtk+-2.x/ctkvdpau.h b/src/gtk+-2.x/ctkvdpau.h
+index ec58d36..ffff839 100644
+--- a/src/gtk+-2.x/ctkvdpau.h
++++ b/src/gtk+-2.x/ctkvdpau.h
+@@ -46,7 +46,7 @@ G_BEGIN_DECLS
+     (G_TYPE_INSTANCE_GET_CLASS ((obj), CTK_TYPE_VDPAU, CtkVDPAUClass))
+ 
+ 
+-struct VDPAUDeviceImpl {
++extern struct VDPAUDeviceImpl {
+ 
+     VdpGetErrorString *GetErrorString;
+     VdpGetProcAddress *GetProcAddress;

@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        440.64
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -14,6 +14,7 @@ Patch0:         %{name}-desktop.patch
 Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
 Patch3:         %{name}-lib-permissions.patch
+Patch4:         https://patch-diff.githubusercontent.com/raw/NVIDIA/nvidia-settings/pull/47.patch#/%{name}-gcc10.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -151,6 +152,9 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Sat Mar 14 2020 Simone Caronni <negativo17@gmail.com> - 3:440.64-2
+- Add patch for GCC 10.
+
 * Fri Feb 28 2020 Simone Caronni <negativo17@gmail.com> - 3:440.64-1
 - Update to 440.64.
 
