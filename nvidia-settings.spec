@@ -1,6 +1,6 @@
 Name:           nvidia-settings
-Version:        440.64
-Release:        2%{?dist}
+Version:        440.82
+Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -152,6 +152,9 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu Apr 09 2020 Simone Caronni <negativo17@gmail.com> - 3:440.82-1
+- Update to 440.82.
+
 * Sat Mar 14 2020 Simone Caronni <negativo17@gmail.com> - 3:440.64-2
 - Add patch for GCC 10.
 
