@@ -14,7 +14,6 @@ Patch0:         %{name}-desktop.patch
 Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
 Patch3:         %{name}-lib-permissions.patch
-Patch4:         https://patch-diff.githubusercontent.com/raw/NVIDIA/nvidia-settings/pull/47.patch#/%{name}-gcc10.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
