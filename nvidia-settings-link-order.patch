@@ -1,6 +1,6 @@
-diff -Naur nvidia-settings-460.27.04.old/src/Makefile nvidia-settings-460.27.04/src/Makefile
---- nvidia-settings-460.27.04.old/src/Makefile	2020-12-20 16:44:10.709176203 +0100
-+++ nvidia-settings-460.27.04/src/Makefile	2020-12-20 16:46:34.772551199 +0100
+diff -Naur nvidia-settings-460.00.old/src/Makefile nvidia-settings-460.00/src/Makefile
+--- nvidia-settings-460.00.old/src/Makefile	2020-09-09 14:21:57.030897878 -0700
++++ nvidia-settings-460.00/src/Makefile	2020-09-09 14:23:43.473037302 -0700
 @@ -42,7 +42,7 @@
  endif
  
@@ -19,7 +19,7 @@ diff -Naur nvidia-settings-460.27.04.old/src/Makefile nvidia-settings-460.27.04/
    endif
  else
    GTK3_CFLAGS ?=
-@@ -279,19 +279,19 @@
+@@ -280,19 +280,19 @@
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
  $(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
  	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
