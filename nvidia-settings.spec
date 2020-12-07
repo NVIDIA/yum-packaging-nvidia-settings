@@ -1,6 +1,6 @@
 Name:           nvidia-settings
 Version:        450.80.02
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -19,7 +19,9 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
 BuildRequires:  gcc
 BuildRequires:  gtk2-devel > 2.4
+BuildRequires:  gtk3-devel
 BuildRequires:  jansson-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  libvdpau-devel >= 1.0
 BuildRequires:  libXxf86vm-devel
 BuildRequires:  libXext-devel
@@ -28,11 +30,6 @@ BuildRequires:  libXv-devel
 BuildRequires:  m4
 BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
-
-%if 0%{?fedora} || 0%{?rhel} >= 7
-BuildRequires:  gtk3-devel
-BuildRequires:  libappstream-glib
-%endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
@@ -108,7 +105,7 @@ cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} || 0%{?rhel} >= 8
 # install AppData and add modalias provides
 mkdir -p %{buildroot}%{_metainfodir}/
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
@@ -117,7 +114,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} || 0%{?rhel} >= 8
 appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
 %endif
 
@@ -127,17 +124,13 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_metainfodir}/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-%if 0%{?fedora} || 0%{?rhel} >= 7
 %{_libdir}/libnvidia-gtk3.so.%{version}
 %exclude %{_libdir}/libnvidia-gtk2.so.%{version}
-%else
-%{_libdir}/libnvidia-gtk2.so.%{version}
-%endif
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
@@ -151,6 +144,10 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Mon Dec 07 2020 Simone Caronni <negativo17@gmail.com> - 3:455.80.02-2
+- Remove RHEL/CentOS 6 support.
+- Do not generate AppData on CentOS/RHEL 7.
+
 * Tue Oct 06 2020 Simone Caronni <negativo17@gmail.com> - 3:450.80.02-1
 - Update to 450.80.02.
 
