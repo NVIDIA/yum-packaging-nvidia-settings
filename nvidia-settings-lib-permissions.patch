@@ -1,7 +1,7 @@
-diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/utils.mk nvidia-settings-430.26/src/libXNVCtrl/utils.mk
---- nvidia-settings-430.26.old/src/libXNVCtrl/utils.mk	2019-06-15 13:36:23.722337381 +0200
-+++ nvidia-settings-430.26/src/libXNVCtrl/utils.mk	2019-06-16 08:43:55.252949232 +0200
-@@ -64,7 +64,7 @@
+diff -Naur nvidia-settings-460.27.04.old/src/libXNVCtrl/utils.mk nvidia-settings-460.27.04/src/libXNVCtrl/utils.mk
+--- nvidia-settings-460.27.04.old/src/libXNVCtrl/utils.mk	2020-12-20 16:44:10.711176236 +0100
++++ nvidia-settings-460.27.04/src/libXNVCtrl/utils.mk	2020-12-20 16:49:08.323183586 +0100
+@@ -70,7 +70,7 @@
  
  INSTALL               ?= install
  INSTALL_BIN_ARGS      ?= -m 755
@@ -10,10 +10,10 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/utils.mk nvidia-settings-43
  INSTALL_DOC_ARGS      ?= -m 644
  
  M4                    ?= m4
-diff -Naur nvidia-settings-430.26.old/utils.mk nvidia-settings-430.26/utils.mk
---- nvidia-settings-430.26.old/utils.mk	2019-06-15 13:36:23.751337922 +0200
-+++ nvidia-settings-430.26/utils.mk	2019-06-16 08:43:36.155596342 +0200
-@@ -64,7 +64,7 @@
+diff -Naur nvidia-settings-460.27.04.old/utils.mk nvidia-settings-460.27.04/utils.mk
+--- nvidia-settings-460.27.04.old/utils.mk	2020-12-20 16:44:10.741176730 +0100
++++ nvidia-settings-460.27.04/utils.mk	2020-12-20 16:49:08.324183603 +0100
+@@ -70,7 +70,7 @@
  
  INSTALL               ?= install
  INSTALL_BIN_ARGS      ?= -m 755

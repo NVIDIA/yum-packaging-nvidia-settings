@@ -1,6 +1,6 @@
-diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/Makefile nvidia-settings-430.26/src/libXNVCtrl/Makefile
---- nvidia-settings-430.26.old/src/libXNVCtrl/Makefile	2019-06-16 21:49:43.008676795 +0200
-+++ nvidia-settings-430.26/src/libXNVCtrl/Makefile	2019-06-16 21:50:31.462519476 +0200
+diff -Naur nvidia-settings-460.27.04.old/src/libXNVCtrl/Makefile nvidia-settings-460.27.04/src/libXNVCtrl/Makefile
+--- nvidia-settings-460.27.04.old/src/libXNVCtrl/Makefile	2020-12-20 16:44:10.711176236 +0100
++++ nvidia-settings-460.27.04/src/libXNVCtrl/Makefile	2020-12-20 16:48:21.704372762 +0100
 @@ -51,7 +51,9 @@
  .PHONY: clean
  
@@ -11,9 +11,9 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/Makefile nvidia-settings-43
  	rm -rf $(LIBXNVCTRL) *~ \
  		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d
 +	rm -f $(LIBXNVCTRL_SHARED) $(LIBXNVCTRL_SHARED).*
-diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-430.26/src/libXNVCtrl/xnvctrl.mk
---- nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk	2019-06-16 21:49:43.008676795 +0200
-+++ nvidia-settings-430.26/src/libXNVCtrl/xnvctrl.mk	2019-06-18 18:48:30.736176713 +0200
+diff -Naur nvidia-settings-460.27.04.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-460.27.04/src/libXNVCtrl/xnvctrl.mk
+--- nvidia-settings-460.27.04.old/src/libXNVCtrl/xnvctrl.mk	2020-12-20 16:44:10.711176236 +0100
++++ nvidia-settings-460.27.04/src/libXNVCtrl/xnvctrl.mk	2020-12-20 16:48:21.753373614 +0100
 @@ -37,7 +37,8 @@
  XNVCTRL_CFLAGS ?=
  
@@ -34,10 +34,10 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
 +	$(CC) -shared -Wl,-soname=$@.0 -o $@.0.0.0 $(LDFLAGS) $^ -lXext -lX11
 +	ln -s $@.0.0.0 $@.0
 +	ln -s $@.0 $@
-diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Makefile
---- nvidia-settings-430.26.old/src/Makefile	2019-06-16 21:49:43.008676795 +0200
-+++ nvidia-settings-430.26/src/Makefile	2019-06-18 19:49:17.801594771 +0200
-@@ -257,7 +257,11 @@
+diff -Naur nvidia-settings-460.27.04.old/src/Makefile nvidia-settings-460.27.04/src/Makefile
+--- nvidia-settings-460.27.04.old/src/Makefile	2020-12-20 16:48:06.118101672 +0100
++++ nvidia-settings-460.27.04/src/Makefile	2020-12-20 16:48:21.754373631 +0100
+@@ -256,7 +256,11 @@
  
  all: $(NVIDIA_SETTINGS) $(GTK2LIB) $(GTK3LIB)
  
@@ -50,7 +50,7 @@ diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Ma
  
  NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
  	$(MKDIR) $(LIBDIR)
-@@ -273,9 +277,9 @@
+@@ -272,9 +276,9 @@
  	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
  
  $(eval $(call DEBUG_INFO_RULES, $(NVIDIA_SETTINGS)))
@@ -61,8 +61,8 @@ diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Ma
 +	    -rdynamic -o $@ $(OBJS) $(LIBXNVCTRL_SHARED) $(LIBS)
  
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
- $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
-@@ -283,7 +287,7 @@
+ $(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+@@ -282,7 +286,7 @@
  	    -o $@ \
  	    -Wl,-soname -Wl,$(GTK2LIB_SONAME) \
  	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS) \
@@ -71,7 +71,7 @@ diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Ma
  
  ifdef BUILD_GTK3LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK3LIB)))
-@@ -292,7 +296,7 @@
+@@ -291,7 +295,7 @@
  	    -o $@ \
  	    -Wl,-soname -Wl,$(GTK3LIB_SONAME) \
  	    $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) \
@@ -80,7 +80,7 @@ diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Ma
  endif
  
  # define the rule to build each object file
-@@ -303,7 +307,7 @@
+@@ -302,7 +306,7 @@
  	rm -rf $(NVIDIA_SETTINGS) *~ \
  		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d \
  		$(GTK2LIB) $(GTK3LIB) $(GTK2LIB_DIR) $(GTK3LIB_DIR) \
