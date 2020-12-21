@@ -78,7 +78,7 @@ sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 %build
 export CFLAGS="%{optflags} -fPIC"
 export LDFLAGS="%{?__global_ldflags}"
-make %{?_smp_mflags} \
+make \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
