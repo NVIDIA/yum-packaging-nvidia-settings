@@ -1,5 +1,5 @@
 Name:           nvidia-settings
-Version:        430.14
+Version:        435.21
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -10,9 +10,10 @@ ExclusiveArch:  %{ix86} x86_64 ppc64le aarch64
 Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
-Patch0:         %{name}-367.44-validate.patch
-Patch1:         %{name}-375.10-defaults.patch
-Patch2:         %{name}-410.57-libXNVCtrl-so.patch
+Patch0:         %{name}-desktop.patch
+Patch1:         %{name}-link-order.patch
+Patch2:         %{name}-libXNVCtrl.patch
+Patch3:         %{name}-lib-permissions.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -30,6 +31,7 @@ BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gtk3-devel
+BuildRequires:  libappstream-glib
 %endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
@@ -65,10 +67,7 @@ This devel package contains libraries and header files for
 developing applications that use the NV-CONTROL API.
 
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%autosetup -p1
 
 # Remove bundled jansson
 rm -fr src/jansson
@@ -87,6 +86,7 @@ make %{?_smp_mflags} \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
     PREFIX=%{_prefix} \
+    XNVCTRL_LDFLAGS="-L%{_libdir}"
 
 %install
 # Install libXNVCtrl headers
@@ -100,47 +100,44 @@ cp -af src/libXNVCtrl/*.h %{buildroot}%{_includedir}/NVCtrl/
     NV_VERBOSE=1 \
     PREFIX=%{_prefix}
 
-
 # Install desktop file
 mkdir -p %{buildroot}%{_datadir}/{applications,pixmaps}
 desktop-file-install --dir %{buildroot}%{_datadir}/applications/ doc/%{name}.desktop
 cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 7
 # install AppData and add modalias provides
-mkdir -p %{buildroot}%{_datadir}/appdata
-install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
+mkdir -p %{buildroot}%{_metainfodir}/
+install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
 %endif
 
-%post -n nvidia-libXNVCtrl -p /sbin/ldconfig
-
-%postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
-
-%post
-/sbin/ldconfig
-%if 0%{?rhel} == 7
-/usr/bin/update-desktop-database &> /dev/null || :
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
+%if 0%{?fedora} || 0%{?rhel} >= 7
+appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
 %endif
 
-%postun
-/sbin/ldconfig
-%if 0%{?rhel} == 7
-/usr/bin/update-desktop-database &> /dev/null || :
-%endif
+%ldconfig_scriptlets
+
+%ldconfig_scriptlets -n nvidia-libXNVCtrl
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora}
-%{_datadir}/appdata/%{name}.appdata.xml
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%{_metainfodir}/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-%{_libdir}/libnvidia-gtk*.so.%{version}
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%{_libdir}/libnvidia-gtk3.so.%{version}
+%exclude %{_libdir}/libnvidia-gtk2.so.%{version}
+%else
+%{_libdir}/libnvidia-gtk2.so.%{version}
+%endif
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
@@ -158,6 +155,30 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
+- Update to 435.21.
+
+* Thu Aug 22 2019 Simone Caronni <negativo17@gmail.com> - 3:435.17-1
+- Update to 435.17.
+
+* Wed Jul 31 2019 Simone Caronni <negativo17@gmail.com> - 3:430.40-1
+- Update to 430.40.
+- Update AppData installation.
+
+* Fri Jul 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.34-1
+- Update to 430.34.
+
+* Tue Jun 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-3
+- Fix rpm message when upgrading from Fedora's libXNVCtrl.
+
+* Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-2
+- Revert libXNVCtrl soname to libXNVCtrl.so.0.
+
+* Wed Jun 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-1
+- Update to 430.26.
+- Update patches.
+- Update SPEC file.
+
 * Sat May 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.14-1
 - Update to 430.14.
 
