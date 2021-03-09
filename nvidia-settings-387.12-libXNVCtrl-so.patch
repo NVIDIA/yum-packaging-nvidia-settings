@@ -1,0 +1,72 @@
+diff -Naur nvidia-settings-387.12.old/src/libXNVCtrl/Makefile nvidia-settings-387.12/src/libXNVCtrl/Makefile
+--- nvidia-settings-387.12.old/src/libXNVCtrl/Makefile	2017-10-05 08:51:44.949208854 +0200
++++ nvidia-settings-387.12/src/libXNVCtrl/Makefile	2017-10-05 08:52:46.384309222 +0200
+@@ -31,7 +31,7 @@
+ # assign variables
+ ##############################################################################
+ 
+-LIBXNVCTRL = libXNVCtrl.a
++LIBXNVCTRL = libXNVCtrl.so
+ 
+ LIBXNVCTRL_PROGRAM_NAME = "libXNVCtrl"
+ 
+@@ -59,8 +59,11 @@
+ 
+ all: $(LIBXNVCTRL)
+ 
+-$(LIBXNVCTRL) : $(OBJS)
+-	$(AR) ru $@ $(OBJS)
++$(LIBXNVCTRL): $(OBJS)
++	$(RM) $@ $@.*
++	$(CC) -shared -Wl,-soname=$@.0 -o $@.$(NVIDIA_VERSION) $(LDFLAGS) $^ -lXext -lX11
++	ln -s $@.$(NVIDIA_VERSION) $@.0
++	ln -s $@.0 $@
+ 
+ # define the rule to build each object file
+ $(foreach src,$(SRC),$(eval $(call DEFINE_OBJECT_RULE,TARGET,$(src))))
+diff -Naur nvidia-settings-387.12.old/src/Makefile nvidia-settings-387.12/src/Makefile
+--- nvidia-settings-387.12.old/src/Makefile	2017-10-05 08:51:44.943208746 +0200
++++ nvidia-settings-387.12/src/Makefile	2017-10-05 08:52:46.387309275 +0200
+@@ -110,9 +110,12 @@
+ # assignments should be used)
+ ##############################################################################
+ 
++LIBXNVCTRL = libXNVCtrl.so
++
+ XNVCTRL_DIR             ?= libXNVCtrl
+ XNVCTRL_MAKEFILE        ?= Makefile
+-XNVCTRL_ARCHIVE         ?= $(XNVCTRL_DIR)/libXNVCtrl.a
++XNVCTRL_LIB             ?= $(XNVCTRL_DIR)/$(LIBXNVCTRL)
++
+ XCONFIG_PARSER_DIR      ?= XF86Config-parser
+ COMMON_UTILS_DIR        ?= common-utils
+ COMMON_UNIX_DIR         ?= common-unix
+@@ -284,11 +287,18 @@
+ NVIDIA_SETTINGS_install: $(NVIDIA_SETTINGS)
+ 	$(MKDIR) $(BINDIR)
+ 	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
++	$(MKDIR) $(LIBDIR)
++	$(INSTALL) $(INSTALL_LIB_ARGS) $(XNVCTRL_LIB).$(NVIDIA_VERSION) $(LIBDIR)
++	ln -s $(LIBXNVCTRL).$(NVIDIA_VERSION) $(LIBDIR)/$(LIBXNVCTRL).0
++	ln -s $(LIBXNVCTRL).$(NVIDIA_VERSION) $(LIBDIR)/$(LIBXNVCTRL)
++
++$(XNVCTRL_LIB):
++	$(MAKE) -C $(XNVCTRL_DIR)
+ 
+ $(eval $(call DEBUG_INFO_RULES, $(NVIDIA_SETTINGS)))
+-$(NVIDIA_SETTINGS).unstripped: $(OBJS) $(XNVCTRL_ARCHIVE)
++$(NVIDIA_SETTINGS).unstripped: $(OBJS) $(XNVCTRL_LIB)
+ 	$(call quiet_cmd,LINK) $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
+-	    -rdynamic -o $@ $(OBJS) $(XNVCTRL_ARCHIVE) $(LIBS)
++	    -rdynamic -o $@ $(OBJS) $(XNVCTRL_LIB) $(LIBS)
+ 
+ $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
+ $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+@@ -322,6 +332,7 @@
+ 	@$(MAKE) -C $(XNVCTRL_DIR) -f $(XNVCTRL_MAKEFILE)
+ 
+ clean clobber:
++	$(MAKE) -C $(XNVCTRL_DIR) clean
+ 	rm -rf $(NVIDIA_SETTINGS) *~ \
+ 		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d \
+ 		$(GTK2LIB) $(GTK3LIB) $(GTK2LIB_DIR) $(GTK3LIB_DIR) \

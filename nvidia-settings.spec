@@ -5,7 +5,7 @@ Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
-ExclusiveArch:  %{ix86} x86_64
+ExclusiveArch:  %{ix86} x86_64 ppc64le
 
 Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-load.desktop
@@ -30,6 +30,7 @@ BuildRequires:  libXv-devel
 BuildRequires:  m4
 BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libEGL-devel
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
@@ -135,7 +136,11 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
 %files -n nvidia-libXNVCtrl
+%if 0%{?rhel} == 6
+%doc COPYING
+%else
 %license COPYING
+%endif
 %{_libdir}/libXNVCtrl.so.*
 
 %files -n nvidia-libXNVCtrl-devel
@@ -194,17 +199,11 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 * Sun Nov 17 2019 Simone Caronni <negativo17@gmail.com> - 3:440.31-2
 - Fix full libXNVCtrl libraries instead of symlinks in CentOS/RHEL 6/7.
 
-* Sat Nov 09 2019 Simone Caronni <negativo17@gmail.com> - 3:440.31-1
+* Mon Nov 11 2019 Simone Caronni <negativo17@gmail.com> - 3:440.31-1
 - Update to 440.31.
 
-* Thu Oct 17 2019 Simone Caronni <negativo17@gmail.com> - 3:440.26-1
-- Update to 440.26.
-
-* Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
-- Update to 435.21.
-
-* Thu Aug 22 2019 Simone Caronni <negativo17@gmail.com> - 3:435.17-1
-- Update to 435.17.
+* Sat Sep 14 2019 Simone Caronni <negativo17@gmail.com> - 3:430.50-1
+- Update to 430.50.
 
 * Wed Jul 31 2019 Simone Caronni <negativo17@gmail.com> - 3:430.40-1
 - Update to 430.40.
@@ -237,8 +236,5 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 - Update to 418.43.
 - Trim changelog.
 
-* Wed Feb 06 2019 Simone Caronni <negativo17@gmail.com> - 3:418.30-1
-- Update to 418.30.
-
-* Thu Jan 17 2019 Simone Caronni <negativo17@gmail.com> - 3:415.27-1
-- Update to 415.27.
+* Fri Jan 04 2019 Simone Caronni <negativo17@gmail.com> - 3:410.93-1
+- Update to 410.93.
