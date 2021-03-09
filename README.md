@@ -64,7 +64,7 @@ git clone -b ${branch} https://github.com/NVIDIA/yum-packaging-nvidia-settings
 > ex: git clone -b rhel8 https://github.com/NVIDIA/yum-packaging-nvidia-settings
 ```
 
-### Download a NVIDIA modprobe tarball:
+### Download a NVIDIA settings tarball:
 
 * **Source code** location: [https://github.com/NVIDIA/nvidia-settings/releases](https://github.com/NVIDIA/nvidia-settings/releases)
 
