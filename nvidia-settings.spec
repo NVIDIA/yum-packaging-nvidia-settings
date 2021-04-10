@@ -1,13 +1,15 @@
+%define _tar_end %{?extension}%{?!extension:bz2}
+
 Name:           nvidia-settings
-Version:        435.21
+Version:        %{?version}%{?!version:435.21}
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
-ExclusiveArch:  %{ix86} x86_64 ppc64le
+ExclusiveArch:  %{ix86} x86_64 ppc64le aarch64
 
-Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.%{_tar_end}
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
@@ -168,6 +170,11 @@ install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Fri Apr 09 2021 Kevin Mittman <kmittman@nvidia.com> - 3:460.00-1
+- Add extension variable for gz or bz2 input tarball file
+- Unofficial aarch64 support for RHEL/CentOS 7
+- Populate version with variable
+
 * Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
 - Update to 435.21.
 
