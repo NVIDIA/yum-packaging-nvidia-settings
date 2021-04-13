@@ -1,7 +1,6 @@
 %define _tar_end %{?extension}%{?!extension:bz2}
 
 Name:           nvidia-settings
-Version:        435.21
 Version:        %{?version}%{?!version:435.21}
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
