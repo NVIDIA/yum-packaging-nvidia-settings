@@ -1,5 +1,6 @@
---- nvidia-settings-460.00.old/src/Makefile	2020-09-09 14:21:57.030897878 -0700
-+++ nvidia-settings-460.00/src/Makefile	2020-09-09 14:23:43.473037302 -0700
+diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Makefile
+--- nvidia-settings-430.26.old/src/Makefile	2019-06-15 13:36:23.718337306 +0200
++++ nvidia-settings-430.26/src/Makefile	2019-06-15 13:37:04.210092151 +0200
 @@ -42,7 +42,7 @@
  endif
  
@@ -20,7 +21,7 @@
    GTK3_CFLAGS ?=
 @@ -280,19 +280,19 @@
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
- $(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+ $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
  	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
 -	    $(LIBXNVCTRL) $(LIBS) $(GTK2_LIBS) \
 -	    -Wl,--unresolved-symbols=ignore-all -o $@ \
@@ -32,7 +33,7 @@
  
  ifdef BUILD_GTK3LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK3LIB)))
- $(GTK3LIB).unstripped: $(LIBXNVCTRL) $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+ $(GTK3LIB).unstripped: $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
  	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS)  $(BIN_LDFLAGS) \
 -	    $(LIBXNVCTRL) $(LIBS) $(GTK3_LIBS) \
 -	    -Wl,--unresolved-symbols=ignore-all -o $@ \
