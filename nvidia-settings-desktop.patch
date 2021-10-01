@@ -15,5 +15,5 @@ diff -Naur nvidia-settings-367.44.old/doc/nvidia-settings.desktop nvidia-setting
 +Categories=System;Settings
 +Keywords=nvidia;vulkan;opengl;driver
  
- # Translations provided by Sun Microsystems
- Name[de]=NVIDIA X-Server-Einstellungen
+ # Translation by Marcin Mikołajczak
+ Name[pl]=Ustawienia serwera X NVIDIA
