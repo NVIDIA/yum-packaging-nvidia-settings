@@ -34,8 +34,9 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
 +	$(CC) -shared -Wl,-soname=$@.0 -o $@.0.0.0 $(LDFLAGS) $^ -lXext -lX11
 +	ln -s $@.0.0.0 $@.0
 +	ln -s $@.0 $@
---- nvidia-settings-460.00.old/src/Makefile	2020-09-09 14:52:02.126284960 -0700
-+++ nvidia-settings-460.00/src/Makefile	2020-09-09 14:53:32.801407144 -0700
+diff -Naur nvidia-settings-430.26.old/src/Makefile nvidia-settings-430.26/src/Makefile
+--- nvidia-settings-430.26.old/src/Makefile	2019-06-16 21:49:43.008676795 +0200
++++ nvidia-settings-430.26/src/Makefile	2019-06-18 19:49:17.801594771 +0200
 @@ -257,7 +257,11 @@
  
  all: $(NVIDIA_SETTINGS) $(GTK2LIB) $(GTK3LIB)
@@ -49,7 +50,7 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
  
  NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
  	$(MKDIR) $(LIBDIR)
-@@ -273,26 +277,26 @@
+@@ -273,9 +277,9 @@
  	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
  
  $(eval $(call DEBUG_INFO_RULES, $(NVIDIA_SETTINGS)))
@@ -60,9 +61,8 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
 +	    -rdynamic -o $@ $(OBJS) $(LIBXNVCTRL_SHARED) $(LIBS)
  
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
--$(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
-+$(GTK2LIB).unstripped: $(LIBXNVCTRL_SHARED) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
- 	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
+ $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
+@@ -283,7 +287,7 @@
  	    -o $@ \
  	    -Wl,-soname -Wl,$(GTK2LIB_SONAME) \
  	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS) \
@@ -71,9 +71,7 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
  
  ifdef BUILD_GTK3LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK3LIB)))
--$(GTK3LIB).unstripped: $(LIBXNVCTRL) $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
-+$(GTK3LIB).unstripped: $(LIBXNVCTRL_SHARED) $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
- 	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS)  $(BIN_LDFLAGS) \
+@@ -292,7 +296,7 @@
  	    -o $@ \
  	    -Wl,-soname -Wl,$(GTK3LIB_SONAME) \
  	    $(GTK3_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) \
