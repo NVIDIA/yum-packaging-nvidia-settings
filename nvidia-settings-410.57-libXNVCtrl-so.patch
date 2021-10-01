@@ -1,69 +1,69 @@
-diff -Naur nvidia-settings-430.23.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-430.23/src/libXNVCtrl/xnvctrl.mk
---- nvidia-settings-430.23.old/src/libXNVCtrl/xnvctrl.mk	2019-06-02 05:02:50.000000000 -0700
-+++ nvidia-settings-430.23/src/libXNVCtrl/xnvctrl.mk	2019-06-03 13:34:59.755892544 -0700
-@@ -37,7 +37,7 @@
- XNVCTRL_CFLAGS ?=
+diff -Naur nvidia-settings-410.57.old/src/libXNVCtrl/Makefile nvidia-settings-410.57/src/libXNVCtrl/Makefile
+--- nvidia-settings-410.57.old/src/libXNVCtrl/Makefile	2018-09-25 21:51:03.794718036 +0200
++++ nvidia-settings-410.57/src/libXNVCtrl/Makefile	2018-09-25 21:51:14.815916043 +0200
+@@ -31,7 +31,7 @@
+ # assign variables
+ ##############################################################################
  
- 
--LIBXNVCTRL = $(OUTPUTDIR)/libXNVCtrl.a
+-LIBXNVCTRL = libXNVCtrl.a
 +LIBXNVCTRL = libXNVCtrl.so
  
- LIBXNVCTRL_SRC = $(XNVCTRL_DIR)/NVCtrl.c
+ LIBXNVCTRL_PROGRAM_NAME = "libXNVCtrl"
  
-@@ -45,5 +45,8 @@
+@@ -58,8 +58,11 @@
  
- $(eval $(call DEFINE_OBJECT_RULE,TARGET,$(LIBXNVCTRL_SRC)))
+ all: $(LIBXNVCTRL)
  
--$(LIBXNVCTRL) : $(LIBXNVCTRL_OBJ)
--	$(call quiet_cmd,AR) ru $@ $(LIBXNVCTRL_OBJ)
-+$(LIBXNVCTRL): $(LIBXNVCTRL_OBJ)
+-$(LIBXNVCTRL) : $(OBJS)
+-	$(AR) ru $@ $(OBJS)
++$(LIBXNVCTRL): $(OBJS)
 +	$(RM) $@ $@.*
 +	$(CC) -shared -Wl,-soname=$@.0 -o $@.$(NVIDIA_VERSION) $(LDFLAGS) $^ -lXext -lX11
-+	ln -s libXNVCtrl.so.$(NVIDIA_VERSION) libXNVCtrl.so.0
-+	ln -s libXNVCtrl.so.0 libXNVCtrl.so
-diff -Naur nvidia-settings-430.23.old/src/Makefile nvidia-settings-430.23/src/Makefile 
---- nvidia-settings-430.23.old/src/Makefile	2019-06-02 05:02:48.000000000 -0700
-+++ nvidia-settings-430.23/src/Makefile	2019-06-03 13:44:35.013632597 -0700
-@@ -103,7 +103,10 @@
++	ln -s $@.$(NVIDIA_VERSION) $@.0
++	ln -s $@.0 $@
+ 
+ # define the rule to build each object file
+ $(foreach src,$(SRC),$(eval $(call DEFINE_OBJECT_RULE,TARGET,$(src))))
+diff -Naur nvidia-settings-410.57.old/src/Makefile nvidia-settings-410.57/src/Makefile
+--- nvidia-settings-410.57.old/src/Makefile	2018-09-25 21:51:03.793718017 +0200
++++ nvidia-settings-410.57/src/Makefile	2018-09-25 21:52:06.743848992 +0200
+@@ -110,9 +110,12 @@
  # assignments should be used)
  ##############################################################################
  
-+LIBXNVCTRL = libXNVCtrl/libXNVCtrl.so
++LIBXNVCTRL = libXNVCtrl.so
 +
  XNVCTRL_DIR             ?= libXNVCtrl
-+XNVCTRL_LIB             ?= $(LIBXNVCTRL)
+ XNVCTRL_MAKEFILE        ?= Makefile
+-XNVCTRL_ARCHIVE         ?= $(XNVCTRL_DIR)/libXNVCtrl.a
++XNVCTRL_LIB             ?= $(XNVCTRL_DIR)/$(LIBXNVCTRL)
++
  XCONFIG_PARSER_DIR      ?= XF86Config-parser
  COMMON_UTILS_DIR        ?= common-utils
  COMMON_UNIX_DIR         ?= common-unix
-@@ -223,6 +223,7 @@
- CFLAGS     += -I $(COMMON_UTILS_DIR)
- CFLAGS     += -I $(VIRTUAL_RESOLUTIONS_DIR)
- CFLAGS     += -I $(OUTPUTDIR)
-+CFLAGS     += -I $(OUTPUTDIR)/libXNVCtrl
- CFLAGS     += $(VDPAU_CFLAGS)
- CFLAGS     += $(DBUS_CFLAGS)
- CFLAGS     += -DPROGRAM_NAME=\"nvidia-settings\"
-@@ -271,11 +274,16 @@
+@@ -280,11 +283,18 @@
  NVIDIA_SETTINGS_install: $(NVIDIA_SETTINGS)
  	$(MKDIR) $(BINDIR)
  	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
 +	$(MKDIR) $(LIBDIR)
-+	$(INSTALL) $(INSTALL_LIB_ARGS) $(XNVCTRL_LIB)* $(LIBDIR)
++	$(INSTALL) $(INSTALL_LIB_ARGS) $(XNVCTRL_LIB).$(NVIDIA_VERSION) $(LIBDIR)
++	ln -s $(LIBXNVCTRL).$(NVIDIA_VERSION) $(LIBDIR)/$(LIBXNVCTRL).0
++	ln -s $(LIBXNVCTRL).$(NVIDIA_VERSION) $(LIBDIR)/$(LIBXNVCTRL)
 +
 +$(XNVCTRL_LIB):
 +	$(MAKE) -C $(XNVCTRL_DIR)
  
  $(eval $(call DEBUG_INFO_RULES, $(NVIDIA_SETTINGS)))
--$(NVIDIA_SETTINGS).unstripped: $(OBJS) $(LIBXNVCTRL)
+-$(NVIDIA_SETTINGS).unstripped: $(OBJS) $(XNVCTRL_ARCHIVE)
 +$(NVIDIA_SETTINGS).unstripped: $(OBJS) $(XNVCTRL_LIB)
  	$(call quiet_cmd,LINK) $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
--	    -rdynamic -o $@ $(OBJS) $(LIBXNVCTRL) $(LIBS)
+-	    -rdynamic -o $@ $(OBJS) $(XNVCTRL_ARCHIVE) $(LIBS)
 +	    -rdynamic -o $@ $(OBJS) $(XNVCTRL_LIB) $(LIBS)
  
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
  $(GTK2LIB).unstripped: $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
-@@ -300,6 +310,7 @@
- $(foreach src,$(XCP_SRC),$(eval $(call DEFINE_OBJECT_RULE,TARGET,$(src))))
+@@ -315,6 +325,7 @@
+ 	@$(MAKE) -C $(XNVCTRL_DIR) -f $(XNVCTRL_MAKEFILE)
  
  clean clobber:
 +	$(MAKE) -C $(XNVCTRL_DIR) clean

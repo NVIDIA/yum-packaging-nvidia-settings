@@ -1,21 +1,18 @@
-%define _tar_end %{?extension}%{?!extension:bz2}
-
 Name:           nvidia-settings
-Version:        %{?version}%{?!version:435.21}
+Version:        430.14
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
-ExclusiveArch:  %{ix86} x86_64 ppc64le aarch64
+ExclusiveArch:  %{ix86} x86_64 ppc64le
 
-Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.%{_tar_end}
+Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
-Patch0:         %{name}-desktop.patch
-Patch1:         %{name}-link-order.patch
-Patch2:         %{name}-libXNVCtrl.patch
-Patch3:         %{name}-lib-permissions.patch
+Patch0:         %{name}-367.44-validate.patch
+Patch1:         %{name}-375.10-defaults.patch
+Patch2:         %{name}-410.57-libXNVCtrl-so.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -33,7 +30,6 @@ BuildRequires:  mesa-libGL-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gtk3-devel
-BuildRequires:  libappstream-glib
 %endif
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
@@ -69,7 +65,10 @@ This devel package contains libraries and header files for
 developing applications that use the NV-CONTROL API.
 
 %prep
-%autosetup -p1
+%setup -q
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 # Remove bundled jansson
 rm -fr src/jansson
@@ -81,14 +80,13 @@ sed -i '/+= -O0 -g/d' utils.mk src/libXNVCtrl/utils.mk
 sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 
 %build
-export CFLAGS="%{optflags} -fPIC"
+export CFLAGS="%{optflags}"
 export LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
     PREFIX=%{_prefix} \
-    XNVCTRL_LDFLAGS="-L%{_libdir}"
 
 %install
 # Install libXNVCtrl headers
@@ -102,44 +100,47 @@ cp -af src/libXNVCtrl/*.h %{buildroot}%{_includedir}/NVCtrl/
     NV_VERBOSE=1 \
     PREFIX=%{_prefix}
 
+
 # Install desktop file
 mkdir -p %{buildroot}%{_datadir}/{applications,pixmaps}
 desktop-file-install --dir %{buildroot}%{_datadir}/applications/ doc/%{name}.desktop
 cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-
-%if 0%{?fedora} || 0%{?rhel} >= 7
-# install AppData and add modalias provides
-mkdir -p %{buildroot}%{_metainfodir}/
-install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
-%endif
-
-%check
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 7
-appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
+
+%if 0%{?fedora}
+# install AppData and add modalias provides
+mkdir -p %{buildroot}%{_datadir}/appdata
+install -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/appdata/
 %endif
 
-%ldconfig_scriptlets
+%post -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
-%ldconfig_scriptlets -n nvidia-libXNVCtrl
+%postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
+
+%post
+/sbin/ldconfig
+%if 0%{?rhel} == 7
+/usr/bin/update-desktop-database &> /dev/null || :
+%endif
+
+%postun
+/sbin/ldconfig
+%if 0%{?rhel} == 7
+/usr/bin/update-desktop-database &> /dev/null || :
+%endif
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%{_metainfodir}/%{name}.appdata.xml
+%if 0%{?fedora}
+%{_datadir}/appdata/%{name}.appdata.xml
 %endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%{_libdir}/libnvidia-gtk3.so.%{version}
-%exclude %{_libdir}/libnvidia-gtk2.so.%{version}
-%else
-%{_libdir}/libnvidia-gtk2.so.%{version}
-%endif
+%{_libdir}/libnvidia-gtk*.so.%{version}
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
@@ -157,34 +158,6 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
-* Fri Apr 09 2021 Kevin Mittman <kmittman@nvidia.com> - 3:460.00-1
-- Add extension variable for gz or bz2 input tarball file
-- Populate version with variable
-
-* Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
-- Update to 435.21.
-
-* Thu Aug 22 2019 Simone Caronni <negativo17@gmail.com> - 3:435.17-1
-- Update to 435.17.
-
-* Wed Jul 31 2019 Simone Caronni <negativo17@gmail.com> - 3:430.40-1
-- Update to 430.40.
-- Update AppData installation.
-
-* Fri Jul 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.34-1
-- Update to 430.34.
-
-* Tue Jun 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-3
-- Fix rpm message when upgrading from Fedora's libXNVCtrl.
-
-* Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-2
-- Revert libXNVCtrl soname to libXNVCtrl.so.0.
-
-* Wed Jun 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-1
-- Update to 430.26.
-- Update patches.
-- Update SPEC file.
-
 * Sat May 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.14-1
 - Update to 430.14.
 
