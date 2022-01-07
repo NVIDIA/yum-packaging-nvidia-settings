@@ -15,7 +15,8 @@ Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
 Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
-Patch3:         %{name}-lib-permissions.patch
+Patch3:         %{name}-install-xnvctrl.patch
+Patch4:         %{name}-lib-permissions.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -140,6 +141,7 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %else
 %{_libdir}/libnvidia-gtk2.so.%{version}
 %endif
+%{_libdir}/libnvidia-wayland-client.so.%{version}
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
