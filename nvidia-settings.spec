@@ -141,7 +141,6 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %else
 %{_libdir}/libnvidia-gtk2.so.%{version}
 %endif
-%{_libdir}/libnvidia-wayland-client.so.%{version}
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
@@ -159,6 +158,9 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu Jan 06 2022 Kevin Mittman <kmittman@nvidia.com> - 3:515.00-1
+- Update patches for wayland
+
 * Fri Apr 09 2021 Kevin Mittman <kmittman@nvidia.com> - 3:460.00-1
 - Add extension variable for gz or bz2 input tarball file
 - Populate version with variable
