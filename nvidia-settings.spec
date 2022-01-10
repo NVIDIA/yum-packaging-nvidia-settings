@@ -117,6 +117,9 @@ mkdir -p %{buildroot}%{_metainfodir}/
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
 %endif
 
+# Remove bundled wayland client
+rm -vf %{buildroot}/%{_libdir}/libnvidia-wayland-client.so*
+
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
