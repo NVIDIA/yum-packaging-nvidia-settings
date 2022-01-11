@@ -124,6 +124,10 @@ cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
+# Remove bundled wayland client
+rm -vf %{buildroot}/%{_libdir}/libnvidia-wayland-client.so*
+
+
 %post -n nvidia-libXNVCtrl -p /sbin/ldconfig
 
 %postun -n nvidia-libXNVCtrl -p /sbin/ldconfig
@@ -152,7 +156,6 @@ install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}
 %else
 %{_libdir}/libnvidia-gtk2.so.%{version}
 %endif
-%{_libdir}/libnvidia-wayland-client.so.%{version}
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
@@ -170,6 +173,9 @@ install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu Jan 06 2022 Kevin Mittman <kmittman@nvidia.com> - 3:515.00-1
+- Update patches for wayland
+
 * Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
 - Update to 435.21.
 
