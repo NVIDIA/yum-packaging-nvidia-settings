@@ -1,15 +1,17 @@
---- nvidia-settings-515.00.old/src/Makefile	2022-01-06 22:18:27 -0800
-+++ nvidia-settings-515.00/src/Makefile	2022-01-06 22:18:27 -0800
-@@ -55,7 +55,7 @@
- endif
+Index: nvidia-settings-src/src/Makefile
+===================================================================
+--- nvidia-settings-src.orig/src/Makefile
++++ nvidia-settings-src/src/Makefile
+@@ -60,7 +60,7 @@ ifeq (1,$(GTK2_AVAILABLE))
+   endif
  
- ifndef GTK2_LDFLAGS
--  GTK2_LDFLAGS         := -Wl,--no-as-needed $(shell $(PKG_CONFIG) --libs gtk+-2.0)
-+  GTK2_LDFLAGS         := $(shell $(PKG_CONFIG) --libs gtk+-2.0)
- endif
- 
- ifndef GTK3_AVAILABLE
-@@ -68,7 +68,7 @@
+   ifndef GTK2_LDFLAGS
+-    GTK2_LDFLAGS         := -Wl,--no-as-needed $(shell $(PKG_CONFIG) --libs gtk+-2.0)
++    GTK2_LDFLAGS         := $(shell $(PKG_CONFIG) --libs gtk+-2.0)
+   endif
+ else
+   GTK2_CFLAGS ?=
+@@ -82,7 +82,7 @@ ifeq (1,$(GTK3_AVAILABLE))
    endif
  
    ifndef GTK3_LDFLAGS
@@ -18,7 +20,7 @@
    endif
  else
    GTK3_CFLAGS ?=
-@@ -309,19 +309,19 @@
+@@ -334,20 +334,20 @@ ifdef BUILD_GTK2LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
  $(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
  	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
@@ -29,6 +31,7 @@
 -	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS)
 +	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS) \
 +	    $(LIBXNVCTRL) $(LIBS) $(GTK2_LIBS)
+ endif
  
  ifdef BUILD_GTK3LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK3LIB)))
