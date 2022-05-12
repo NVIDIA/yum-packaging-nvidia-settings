@@ -15,7 +15,8 @@ Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
 Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
-Patch3:         %{name}-lib-permissions.patch
+Patch3:         %{name}-install-xnvctrl.patch
+Patch4:         %{name}-lib-permissions.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
@@ -116,6 +117,9 @@ mkdir -p %{buildroot}%{_metainfodir}/
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
 %endif
 
+# Remove bundled wayland client
+rm -vf %{buildroot}/%{_libdir}/libnvidia-wayland-client.so*
+
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
@@ -157,6 +161,9 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Thu Jan 06 2022 Kevin Mittman <kmittman@nvidia.com> - 3:515.00-1
+- Update patches for wayland
+
 * Fri Apr 09 2021 Kevin Mittman <kmittman@nvidia.com> - 3:460.00-1
 - Add extension variable for gz or bz2 input tarball file
 - Populate version with variable
