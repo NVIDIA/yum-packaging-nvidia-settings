@@ -1,20 +1,23 @@
-diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/Makefile nvidia-settings-430.26/src/libXNVCtrl/Makefile
---- nvidia-settings-430.26.old/src/libXNVCtrl/Makefile	2019-06-16 21:49:43.008676795 +0200
-+++ nvidia-settings-430.26/src/libXNVCtrl/Makefile	2019-06-16 21:50:31.462519476 +0200
-@@ -51,7 +51,9 @@
- .PHONY: clean
+Index: nvidia-settings-src/src/libXNVCtrl/Makefile
+===================================================================
+--- nvidia-settings-src.orig/src/libXNVCtrl/Makefile
++++ nvidia-settings-src/src/libXNVCtrl/Makefile
+@@ -50,8 +50,10 @@ LDFLAGS += $(XNVCTRL_LDFLAGS)
  
+ .PHONY: all
  all: $(LIBXNVCTRL)
 +all: $(LIBXNVCTRL_SHARED)
  
+ .PHONY: clean
  clean:
  	rm -rf $(LIBXNVCTRL) *~ \
  		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d
 +	rm -f $(LIBXNVCTRL_SHARED) $(LIBXNVCTRL_SHARED).*
-diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-430.26/src/libXNVCtrl/xnvctrl.mk
---- nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk	2019-06-16 21:49:43.008676795 +0200
-+++ nvidia-settings-430.26/src/libXNVCtrl/xnvctrl.mk	2019-06-18 18:48:30.736176713 +0200
-@@ -37,7 +37,8 @@
+Index: nvidia-settings-src/src/libXNVCtrl/xnvctrl.mk
+===================================================================
+--- nvidia-settings-src.orig/src/libXNVCtrl/xnvctrl.mk
++++ nvidia-settings-src/src/libXNVCtrl/xnvctrl.mk
+@@ -37,7 +37,8 @@ endif
  XNVCTRL_CFLAGS ?=
  
  
@@ -24,7 +27,7 @@ diff -Naur nvidia-settings-430.26.old/src/libXNVCtrl/xnvctrl.mk nvidia-settings-
  
  LIBXNVCTRL_SRC = $(XNVCTRL_DIR)/NVCtrl.c
  
-@@ -47,3 +48,9 @@
+@@ -47,3 +48,9 @@ $(eval $(call DEFINE_OBJECT_RULE,TARGET,
  
  $(LIBXNVCTRL) : $(LIBXNVCTRL_OBJ)
  	$(call quiet_cmd,AR) ru $@ $(LIBXNVCTRL_OBJ)
