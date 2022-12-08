@@ -17,6 +17,7 @@ Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
 Patch3:         %{name}-install-xnvctrl.patch
 Patch4:         %{name}-lib-permissions.patch
+#Patch5:         %{name}-wllib-gcc10.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel

@@ -1,19 +1,22 @@
---- nvidia-settings-515.00.old/src/Makefile	2022-01-06 23:27:11 -0800
-+++ nvidia-settings-515.00/src/Makefile	2022-01-06 23:27:11 -0800
-@@ -281,7 +281,11 @@
- 
+Index: nvidia-settings-src/src/Makefile
+===================================================================
+--- nvidia-settings-src.orig/src/Makefile
++++ nvidia-settings-src/src/Makefile
+@@ -303,7 +303,12 @@ endef
  all: $(NVIDIA_SETTINGS) $(GTK2LIB) $(GTK3LIB) $(WAYLANDLIB)
  
+ .PHONY: install
 -install: NVIDIA_SETTINGS_install NVIDIA_GTKLIB_install WAYLAND_LIB_install
 +install: NVIDIA_SETTINGS_install NVIDIA_GTKLIB_install WAYLAND_LIB_install NVIDIA_XNVCTRL_install
 +
++.PHONY: NVIDIA_XNVCTRL_install
 +NVIDIA_XNVCTRL_install:
 +	$(MKDIR) $(LIBDIR)
 +	cp -a $(LIBXNVCTRL_SHARED)* $(LIBDIR)
  
+ .PHONY: NVIDIA_GTKLIB_install
  NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
- 	$(MKDIR) $(LIBDIR)
-@@ -304,26 +307,26 @@
+@@ -329,28 +334,28 @@ NVIDIA_SETTINGS_install: $(NVIDIA_SETTIN
  	$(INSTALL) $(INSTALL_BIN_ARGS) $< $(BINDIR)/$(notdir $<)
  
  $(eval $(call DEBUG_INFO_RULES, $(NVIDIA_SETTINGS)))
@@ -23,6 +26,7 @@
 -	    -rdynamic -o $@ $(OBJS) $(LIBXNVCTRL) $(LIBS)
 +	    -rdynamic -o $@ $(OBJS) $(LIBXNVCTRL_SHARED) $(LIBS)
  
+ ifdef BUILD_GTK2LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
 -$(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
 +$(GTK2LIB).unstripped: $(LIBXNVCTRL_SHARED) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
@@ -32,6 +36,7 @@
  	    $(GTK2_OBJS) $(IMAGE_OBJS) $(XCP_OBJS) \
 -	    $(LIBXNVCTRL) $(LIBS) $(GTK2_LIBS)
 +	    $(LIBXNVCTRL_SHARED) $(LIBS) $(GTK2_LIBS)
+ endif
  
  ifdef BUILD_GTK3LIB
  $(eval $(call DEBUG_INFO_RULES, $(GTK3LIB)))
@@ -46,15 +51,12 @@
  endif
  
  ifdef BUILD_WAYLANDLIB
-@@ -347,10 +347,10 @@
- 	rm -rf $(NVIDIA_SETTINGS) *~ \
+@@ -380,7 +385,7 @@ clean clobber:
  		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d \
  		$(GTK2LIB) $(GTK3LIB) $(GTK2LIB_DIR) $(GTK3LIB_DIR) \
-		$(WAYLANDLIB) $(WAYLANDLIB_DIR) \
+ 		$(WAYLANDLIB) $(WAYLANDLIB_DIR) \
 -		$(IMAGE_HEADERS) $(LIBXNVCTRL)
 +		$(IMAGE_HEADERS) $(LIBXNVCTRL_SHARED)
  
+ ifdef BUILD_GTK2LIB
  $(foreach src,$(GTK_SRC), \
-     $(eval $(call DEFINE_OBJECT_RULE_WITH_DIR,TARGET,$(src),$(GTK2LIB_DIR))))
- 
- ifdef BUILD_GTK3LIB
