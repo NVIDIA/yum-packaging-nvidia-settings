@@ -1,7 +1,7 @@
-Index: nvidia-settings-src/src/libXNVCtrl/Makefile
+Index: nvidia-settings-dev_gpu_drv_cuda_a-20231002_33354363/src/libXNVCtrl/Makefile
 ===================================================================
---- nvidia-settings-src.orig/src/libXNVCtrl/Makefile
-+++ nvidia-settings-src/src/libXNVCtrl/Makefile
+--- nvidia-settings-dev_gpu_drv_cuda_a-20231002_33354363.orig/src/libXNVCtrl/Makefile
++++ nvidia-settings-dev_gpu_drv_cuda_a-20231002_33354363/src/libXNVCtrl/Makefile
 @@ -50,8 +50,10 @@ LDFLAGS += $(XNVCTRL_LDFLAGS)
  
  .PHONY: all
@@ -13,13 +13,13 @@ Index: nvidia-settings-src/src/libXNVCtrl/Makefile
  	rm -rf $(LIBXNVCTRL) *~ \
  		$(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.d
 +	rm -f $(LIBXNVCTRL_SHARED) $(LIBXNVCTRL_SHARED).*
-Index: nvidia-settings-src/src/libXNVCtrl/xnvctrl.mk
+Index: nvidia-settings-dev_gpu_drv_cuda_a-20231002_33354363/src/libXNVCtrl/xnvctrl.mk
 ===================================================================
---- nvidia-settings-src.orig/src/libXNVCtrl/xnvctrl.mk
-+++ nvidia-settings-src/src/libXNVCtrl/xnvctrl.mk
-@@ -37,7 +37,8 @@ endif
- XNVCTRL_CFLAGS ?=
- 
+--- nvidia-settings-dev_gpu_drv_cuda_a-20231002_33354363.orig/src/libXNVCtrl/xnvctrl.mk
++++ nvidia-settings-dev_gpu_drv_cuda_a-20231002_33354363/src/libXNVCtrl/xnvctrl.mk
+@@ -34,7 +34,8 @@ ifndef XNVCTRL_CFLAGS
+   XNVCTRL_CFLAGS := $(shell $(PKG_CONFIG) --cflags x11)
+ endif
  
 -LIBXNVCTRL = $(OUTPUTDIR)/libXNVCtrl.a
 +LIBXNVCTRL = libXNVCtrl.a
@@ -27,7 +27,7 @@ Index: nvidia-settings-src/src/libXNVCtrl/xnvctrl.mk
  
  LIBXNVCTRL_SRC = $(XNVCTRL_DIR)/NVCtrl.c
  
-@@ -47,3 +48,9 @@ $(eval $(call DEFINE_OBJECT_RULE,TARGET,
+@@ -44,3 +45,9 @@ $(eval $(call DEFINE_OBJECT_RULE,TARGET,
  
  $(LIBXNVCTRL) : $(LIBXNVCTRL_OBJ)
  	$(call quiet_cmd,AR) ru $@ $(LIBXNVCTRL_OBJ)

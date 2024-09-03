@@ -1,7 +1,7 @@
 %define _tar_end %{?extension}%{?!extension:bz2}
 
 Name:           nvidia-settings
-Version:        %{?version}%{?!version:535.73}
+Version:        %{?version}%{?!version:550.54.14}
 Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
@@ -11,7 +11,6 @@ ExclusiveArch:  %{ix86} x86_64 ppc64le aarch64
 
 Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.%{_tar_end}
 Source1:        %{name}-load.desktop
-Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
 Patch1:         %{name}-link-order.patch
 Patch2:         %{name}-libXNVCtrl.patch
@@ -163,7 +162,7 @@ rm -vf %{buildroot}/%{_libdir}/libnvidia-wayland-client.so*
 %{_libdir}/libXNVCtrl.so
 
 %changelog
-* Tue Mar 26 2024 Simone Caronni <scaronni@nvidia.com> - 3:535.73-2
+* Tue Mar 26 2024 Simone Caronni <scaronni@nvidia.com> - 3:550.54.14-2
 - Drop GTK 2 library.
 
 * Thu Jan 06 2022 Kevin Mittman <kmittman@nvidia.com> - 3:515.00-1

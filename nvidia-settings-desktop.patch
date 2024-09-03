@@ -1,7 +1,7 @@
-Index: nvidia-settings-530.16/doc/nvidia-settings.desktop
+Index: nvidia-settings-dev_gpu_drv_cuda_a-20230124_32333255/doc/nvidia-settings.desktop
 ===================================================================
---- nvidia-settings-530.16.orig/doc/nvidia-settings.desktop
-+++ nvidia-settings-530.16/doc/nvidia-settings.desktop
+--- nvidia-settings-dev_gpu_drv_cuda_a-20230124_32333255.orig/doc/nvidia-settings.desktop
++++ nvidia-settings-dev_gpu_drv_cuda_a-20230124_32333255/doc/nvidia-settings.desktop
 @@ -1,11 +1,11 @@
  [Desktop Entry]
  Type=Application
