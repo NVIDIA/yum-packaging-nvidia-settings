@@ -1,28 +1,28 @@
 %define _tar_end %{?extension}%{?!extension:bz2}
 
 Name:           nvidia-settings
-Version:        %{?version}%{?!version:435.21}
+Version:        %{?version}%{?!version:550.54.14}
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
-ExclusiveArch:  %{ix86} x86_64 ppc64le aarch64
+ExclusiveArch:  %{ix86} x86_64 aarch64
 
 Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.%{_tar_end}
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
-Patch1:         %{name}-link-order.patch
-Patch2:         %{name}-libXNVCtrl.patch
-Patch3:         %{name}-install-xnvctrl.patch
-Patch4:         %{name}-lib-permissions.patch
-Patch5:         %{name}-ld-dep-remove.patch
+Patch1:         %{name}-lib-permissions.patch
+Patch2:         %{name}-link-order.patch
+Patch3:         %{name}-libXNVCtrl.patch
+Patch4:         %{name}-ld-dep-remove.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
 BuildRequires:  gcc
 BuildRequires:  jansson-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  libvdpau-devel >= 1.0
 BuildRequires:  libXxf86vm-devel
 BuildRequires:  libXext-devel
@@ -31,11 +31,8 @@ BuildRequires:  libXv-devel
 BuildRequires:  m4
 BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
-
-%if 0%{?fedora} || 0%{?rhel} >= 7
-BuildRequires:  gtk3-devel
-BuildRequires:  libappstream-glib
-%endif
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(wayland-client)
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
@@ -84,7 +81,7 @@ sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 %build
 export CFLAGS="%{optflags} -fPIC"
 export LDFLAGS="%{?__global_ldflags}"
-make %{?_smp_mflags} \
+%make_build \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
@@ -111,43 +108,27 @@ cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
 # install AppData and add modalias provides
 mkdir -p %{buildroot}%{_metainfodir}/
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
-%endif
-
-# Remove bundled wayland client
-rm -vf %{buildroot}/%{_libdir}/libnvidia-wayland-client.so*
 
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 7
 appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
-%endif
-
-%ldconfig_scriptlets
-
-%ldconfig_scriptlets -n nvidia-libXNVCtrl
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%{_metainfodir}/%{name}.appdata.xml
-%endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
 %{_libdir}/libnvidia-gtk3.so.%{version}
+%{_libdir}/libnvidia-wayland-client.so.%{version}
 %{_mandir}/man1/%{name}.*
+%{_metainfodir}/%{name}.appdata.xml
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
 %files -n nvidia-libXNVCtrl
-%if 0%{?rhel} == 6
-%doc COPYING
-%else
 %license COPYING
-%endif
 %{_libdir}/libXNVCtrl.so.*
 
 %files -n nvidia-libXNVCtrl-devel
