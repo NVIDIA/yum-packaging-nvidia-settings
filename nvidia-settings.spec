@@ -1,29 +1,28 @@
 %define _tar_end %{?extension}%{?!extension:bz2}
 
 Name:           nvidia-settings
-Version:        %{?version}%{?!version:435.21}
+Version:        %{?version}%{?!version:550.54.14}
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
-ExclusiveArch:  %{ix86} x86_64 ppc64le aarch64
+ExclusiveArch:  %{ix86} x86_64 aarch64
 
 Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.%{_tar_end}
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
-Patch1:         %{name}-link-order.patch
-Patch2:         %{name}-libXNVCtrl.patch
-Patch3:         %{name}-install-xnvctrl.patch
-Patch4:         %{name}-lib-permissions.patch
-#Patch5:         %{name}-wllib-gcc10.patch
+Patch1:         %{name}-lib-permissions.patch
+Patch2:         %{name}-link-order.patch
+Patch3:         %{name}-libXNVCtrl.patch
+Patch4:         %{name}-ld-dep-remove.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
 BuildRequires:  gcc
-BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  libvdpau-devel >= 1.0
 BuildRequires:  libXxf86vm-devel
 BuildRequires:  libXext-devel
@@ -32,11 +31,8 @@ BuildRequires:  libXv-devel
 BuildRequires:  m4
 BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
-
-%if 0%{?fedora} || 0%{?rhel} >= 7
-BuildRequires:  gtk3-devel
-BuildRequires:  libappstream-glib
-%endif
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(wayland-client)
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
@@ -85,7 +81,7 @@ sed -i -e 's|$(PREFIX)/lib|$(PREFIX)/%{_lib}|g' utils.mk src/libXNVCtrl/utils.mk
 %build
 export CFLAGS="%{optflags} -fPIC"
 export LDFLAGS="%{?__global_ldflags}"
-make %{?_smp_mflags} \
+%make_build \
     DEBUG=1 \
     NV_USE_BUNDLED_LIBJANSSON=0 \
     NV_VERBOSE=1 \
@@ -112,156 +108,30 @@ cp doc/%{name}.png %{buildroot}%{_datadir}/pixmaps/
 # Install autostart file to load settings at login
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
 # install AppData and add modalias provides
 mkdir -p %{buildroot}%{_metainfodir}/
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_metainfodir}/
-%endif
-
-# Remove bundled wayland client
-rm -vf %{buildroot}/%{_libdir}/libnvidia-wayland-client.so*
 
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}-load.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 7
 appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appdata.xml
-%endif
-
-%ldconfig_scriptlets
-
-%ldconfig_scriptlets -n nvidia-libXNVCtrl
 
 %files
 %{_bindir}/%{name}
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%{_metainfodir}/%{name}.appdata.xml
-%endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-%if 0%{?fedora} || 0%{?rhel} >= 7
 %{_libdir}/libnvidia-gtk3.so.%{version}
-%exclude %{_libdir}/libnvidia-gtk2.so.%{version}
-%else
-%{_libdir}/libnvidia-gtk2.so.%{version}
-%endif
+%{_libdir}/libnvidia-wayland-client.so.%{version}
 %{_mandir}/man1/%{name}.*
+%{_metainfodir}/%{name}.appdata.xml
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
 %files -n nvidia-libXNVCtrl
-%if 0%{?rhel} == 6
-%doc COPYING
-%else
 %license COPYING
-%endif
 %{_libdir}/libXNVCtrl.so.*
 
 %files -n nvidia-libXNVCtrl-devel
 %doc doc/NV-CONTROL-API.txt doc/FRAMELOCK.txt
 %{_includedir}/NVCtrl
 %{_libdir}/libXNVCtrl.so
-
-%changelog
-* Thu Jan 06 2022 Kevin Mittman <kmittman@nvidia.com> - 3:515.00-1
-- Update patches for wayland
-
-* Fri Apr 09 2021 Kevin Mittman <kmittman@nvidia.com> - 3:460.00-1
-- Add extension variable for gz or bz2 input tarball file
-- Populate version with variable
-
-* Mon Sep 02 2019 Simone Caronni <negativo17@gmail.com> - 3:435.21-1
-- Update to 435.21.
-
-* Thu Aug 22 2019 Simone Caronni <negativo17@gmail.com> - 3:435.17-1
-- Update to 435.17.
-
-* Wed Jul 31 2019 Simone Caronni <negativo17@gmail.com> - 3:430.40-1
-- Update to 430.40.
-- Update AppData installation.
-
-* Fri Jul 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.34-1
-- Update to 430.34.
-
-* Tue Jun 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-3
-- Fix rpm message when upgrading from Fedora's libXNVCtrl.
-
-* Sun Jun 16 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-2
-- Revert libXNVCtrl soname to libXNVCtrl.so.0.
-
-* Wed Jun 12 2019 Simone Caronni <negativo17@gmail.com> - 3:430.26-1
-- Update to 430.26.
-- Update patches.
-- Update SPEC file.
-
-* Sat May 18 2019 Simone Caronni <negativo17@gmail.com> - 3:430.14-1
-- Update to 430.14.
-
-* Thu May 09 2019 Simone Caronni <negativo17@gmail.com> - 3:418.74-1
-- Update to 418.74.
-
-* Sun Mar 24 2019 Simone Caronni <negativo17@gmail.com> - 3:418.56-1
-- Update to 418.56.
-
-* Fri Feb 22 2019 Simone Caronni <negativo17@gmail.com> - 3:418.43-1
-- Update to 418.43.
-- Trim changelog.
-
-* Wed Feb 06 2019 Simone Caronni <negativo17@gmail.com> - 3:418.30-1
-- Update to 418.30.
-
-* Thu Jan 17 2019 Simone Caronni <negativo17@gmail.com> - 3:415.27-1
-- Update to 415.27.
-
-* Thu Dec 20 2018 Simone Caronni <negativo17@gmail.com> - 3:415.25-1
-- Update to 415.25.
-
-* Fri Dec 14 2018 Simone Caronni <negativo17@gmail.com> - 3:415.23-1
-- Update to 415.23.
-
-* Sun Dec 09 2018 Simone Caronni <negativo17@gmail.com> - 3:415.22-1
-- Update to 415.22.
-
-* Thu Nov 22 2018 Simone Caronni <negativo17@gmail.com> - 3:415.18-1
-- Update to 415.18.
-
-* Mon Nov 19 2018 Simone Caronni <negativo17@gmail.com> - 3:410.78-1
-- Update to 410.78.
-
-* Fri Oct 26 2018 Simone Caronni <negativo17@gmail.com> - 3:410.73-1
-- Update to 410.73.
-
-* Wed Oct 17 2018 Simone Caronni <negativo17@gmail.com> - 3:410.66-1
-- Update to 410.66.
-
-* Sat Sep 22 2018 Simone Caronni <negativo17@gmail.com> - 3:410.57-1
-- Update to 410.57.
-
-* Wed Aug 22 2018 Simone Caronni <negativo17@gmail.com> - 3:396.54-1
-- Update to 396.54.
-
-* Sun Aug 19 2018 Simone Caronni <negativo17@gmail.com> - 3:396.51-1
-- Update to 396.51.
-
-* Fri Jul 20 2018 Simone Caronni <negativo17@gmail.com> - 3:396.45-1
-- Update to 396.45.
-
-* Fri Jun 01 2018 Simone Caronni <negativo17@gmail.com> - 3:396.24-1
-- Update to 396.24.
-
-* Tue May 22 2018 Simone Caronni <negativo17@gmail.com> - 3:390.59-1
-- Update to 390.59.
-
-* Tue Apr 03 2018 Simone Caronni <negativo17@gmail.com> - 3:390.48-1
-- Update to 390.48.
-
-* Thu Mar 15 2018 Simone Caronni <negativo17@gmail.com> - 3:390.42-1
-- Update to 390.42.
-
-* Tue Feb 27 2018 Simone Caronni <negativo17@gmail.com> - 3:390.25-2
-- Align Epoch with other components.
-
-* Tue Jan 30 2018 Simone Caronni <negativo17@gmail.com> - 2:390.25-1
-- Update to 390.25.
-
-* Fri Jan 19 2018 Simone Caronni <negativo17@gmail.com> - 2:390.12-1
-- Update to 390.12.

@@ -1,8 +1,7 @@
-Index: nvidia-settings-src/src/Makefile
-===================================================================
---- nvidia-settings-src.orig/src/Makefile
-+++ nvidia-settings-src/src/Makefile
-@@ -60,7 +60,7 @@ ifeq (1,$(GTK2_AVAILABLE))
+diff -Naur nvidia-settings-525.60.11.old/src/Makefile nvidia-settings-525.60.11/src/Makefile
+--- nvidia-settings-525.60.11.old/src/Makefile	2022-12-01 07:56:28.657046446 +0100
++++ nvidia-settings-525.60.11/src/Makefile	2022-12-01 08:01:09.920906524 +0100
+@@ -60,7 +60,7 @@
    endif
  
    ifndef GTK2_LDFLAGS
@@ -11,7 +10,7 @@ Index: nvidia-settings-src/src/Makefile
    endif
  else
    GTK2_CFLAGS ?=
-@@ -82,7 +82,7 @@ ifeq (1,$(GTK3_AVAILABLE))
+@@ -82,7 +82,7 @@
    endif
  
    ifndef GTK3_LDFLAGS
@@ -20,7 +19,7 @@ Index: nvidia-settings-src/src/Makefile
    endif
  else
    GTK3_CFLAGS ?=
-@@ -334,20 +334,20 @@ ifdef BUILD_GTK2LIB
+@@ -337,30 +337,29 @@
  $(eval $(call DEBUG_INFO_RULES, $(GTK2LIB)))
  $(GTK2LIB).unstripped: $(LIBXNVCTRL) $(GTK2_OBJS) $(XCP_OBJS) $(IMAGE_OBJS) $(VERSION_MK)
  	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS) $(BIN_LDFLAGS) \
@@ -47,3 +46,15 @@ Index: nvidia-settings-src/src/Makefile
  endif
  
  ifdef BUILD_WAYLANDLIB
+ $(eval $(call DEBUG_INFO_RULES, $(WAYLANDLIB)))
+ $(WAYLANDLIB).unstripped: $(WAYLAND_OBJS)
+ 	$(call quiet_cmd,LINK) -shared $(CFLAGS) $(LDFLAGS)  $(BIN_LDFLAGS) \
+-	    $(LIBS) $(WAYLAND_LIBS) \
+-	    -Wl,--unresolved-symbols=ignore-all -o $@ \
++	    -o $@ \
+ 	    -Wl,-soname -Wl,$(WAYLANDLIB_SONAME) \
+-	    $(WAYLAND_OBJS)
++	    $(WAYLAND_OBJS) $(LIBS) $(WAYLAND_LIBS)
+ 
+ endif
+ 
