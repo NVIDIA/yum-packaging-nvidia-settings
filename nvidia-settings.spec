@@ -1,8 +1,8 @@
 %define _tar_end %{?extension}%{?!extension:bz2}
 
 Name:           nvidia-settings
-Version:        %{?version}%{?!version:435.21}
-Release:        1%{?dist}
+Version:        %{?version}%{?!version:535.73}
+Release:        2%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
@@ -22,7 +22,6 @@ Patch4:         %{name}-lib-permissions.patch
 BuildRequires:  desktop-file-utils
 BuildRequires:  dbus-devel
 BuildRequires:  gcc
-BuildRequires:  gtk2-devel > 2.4
 BuildRequires:  jansson-devel
 BuildRequires:  libvdpau-devel >= 1.0
 BuildRequires:  libXxf86vm-devel
@@ -139,12 +138,7 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %endif
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-%if 0%{?fedora} || 0%{?rhel} >= 7
 %{_libdir}/libnvidia-gtk3.so.%{version}
-%exclude %{_libdir}/libnvidia-gtk2.so.%{version}
-%else
-%{_libdir}/libnvidia-gtk2.so.%{version}
-%endif
 %{_mandir}/man1/%{name}.*
 %{_sysconfdir}/xdg/autostart/%{name}-load.desktop
 
@@ -162,6 +156,9 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %{_libdir}/libXNVCtrl.so
 
 %changelog
+* Tue Mar 26 2024 Simone Caronni <scaronni@nvidia.com> - 3:535.73-2
+- Drop GTK 2 library.
+
 * Thu Jan 06 2022 Kevin Mittman <kmittman@nvidia.com> - 3:515.00-1
 - Update patches for wayland
 
