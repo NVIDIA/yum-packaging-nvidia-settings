@@ -1,15 +1,13 @@
-%define _tar_end %{?extension}%{?!extension:bz2}
-
 Name:           nvidia-settings
-Version:        %{?version}%{?!version:550.54.14}
+Version:        570.00
 Release:        1%{?dist}
 Summary:        Configure the NVIDIA graphics driver
 Epoch:          3
 License:        GPLv2+
 URL:            http://www.nvidia.com/object/unix.html
-ExclusiveArch:  %{ix86} x86_64 aarch64
+ExclusiveArch:  x86_64 aarch64
 
-Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.%{_tar_end}
+Source0:        https://download.nvidia.com/XFree86/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-load.desktop
 Source2:        %{name}.appdata.xml
 Patch0:         %{name}-desktop.patch
@@ -33,6 +31,7 @@ BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  vulkan-headers
 
 Requires:       nvidia-libXNVCtrl%{?_isa} = %{?epoch}:%{version}-%{release}
 Requires:       nvidia-driver%{?_isa} = %{?epoch}:%{version}
@@ -135,3 +134,5 @@ appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{name}.appda
 %doc doc/NV-CONTROL-API.txt doc/FRAMELOCK.txt
 %{_includedir}/NVCtrl
 %{_libdir}/libXNVCtrl.so
+
+%changelog
